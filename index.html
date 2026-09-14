@@ -1,0 +1,2847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siamraj EPS — Executive Sales Dashboard Demo (5 Positions)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --primary: #1E3A8A;
+      --primary-dark: #0F172A;
+      --primary-light: #3B82F6;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --border: #E2E8F0;
+      --border-subtle: #F1F5F9;
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --success: #10B981;
+      --success-bg: #ECFDF5;
+      --warning: #F59E0B;
+      --warning-bg: #FFFBEB;
+      --danger: #EF4444;
+      --danger-bg: #FEF2F2;
+      --purple: #8B5CF6;
+      --purple-bg: #F5F3FF;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TOP GLOBAL HEADER */
+    .top-header {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+      color: #FFFFFF;
+      padding: 16px 32px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #FFFFFF;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+
+    .brand-text h1 {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-text h1 span.badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(59, 130, 246, 0.25);
+      color: #60A5FA;
+      padding: 2px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: #94A3B8;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .live-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.1);
+      color: #34D399;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(52, 211, 153, 0.2);
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #10B981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10B981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* RED FLAG ALERT BANNER */
+    .alert-banner {
+      background: linear-gradient(90deg, #FEF2F2 0%, #FFF1F2 100%);
+      border-bottom: 1px solid #FECDD3;
+      padding: 10px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #9F1239;
+    }
+
+    .alert-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .alert-tag {
+      background: #E11D48;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .alert-action {
+      font-weight: 700;
+      color: #BE123C;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* ROLE SWITCHER NAVIGATION */
+    .nav-tabs-wrapper {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      overflow-x: auto;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-tab {
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border: none;
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .nav-tab:hover {
+      color: var(--text);
+      background-color: var(--border-subtle);
+    }
+
+    .nav-tab.active {
+      color: var(--primary-light);
+      border-bottom-color: var(--primary-light);
+      background: linear-gradient(180deg, rgba(59, 130, 246, 0.04) 0%, rgba(59, 130, 246, 0.1) 100%);
+    }
+
+    .nav-tab .role-badge {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: #E2E8F0;
+      color: #475569;
+    }
+
+    .nav-tab.active .role-badge {
+      background: #DBEAFE;
+      color: #1D4ED8;
+    }
+
+    .mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .switch-btn {
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .switch-btn:hover {
+      background: var(--border-subtle);
+    }
+
+    /* MAIN CONTAINER */
+    .dashboard-container {
+      padding: 28px 32px;
+      max-width: 1750px;
+      margin: 0 auto;
+    }
+
+    .role-view {
+      display: none;
+    }
+
+    .role-view.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ROLE INTRO BAR */
+    .role-intro {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .role-intro-left h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .role-tag {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .tag-blue { background: #DBEAFE; color: #1E40AF; }
+    .tag-amber { background: #FEF3C7; color: #92400E; }
+    .tag-purple { background: #EDE9FE; color: #5B21B6; }
+    .tag-green { background: #D1FAE5; color: #065F46; }
+    .tag-navy { background: #1E293B; color: #F8FAFC; }
+
+    .role-intro-left p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .role-cadence-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: var(--border-subtle);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 8px;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    /* METRIC CARDS GRID */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card:hover {
+      box-shadow: var(--shadow);
+      border-color: #CBD5E1;
+      transform: translateY(-2px);
+    }
+
+    .kpi-card .kpi-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .kpi-card .kpi-value {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .kpi-card .kpi-sub {
+      font-size: 12px;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trend-up { color: var(--success); font-weight: 700; }
+    .trend-down { color: var(--danger); font-weight: 700; }
+    .trend-neutral { color: var(--text-muted); font-weight: 600; }
+
+    /* LAYOUT GRIDS */
+    .dashboard-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .dashboard-row.equal {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .dashboard-row.three-col {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .panel-header h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-header .badge-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    /* DATA TABLES */
+    .data-table-wrapper {
+      overflow-x: auto;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: #F8FAFC;
+      color: #475569;
+      font-weight: 700;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.03em;
+    }
+
+    table.data-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: #1E293B;
+    }
+
+    table.data-table tr:hover td {
+      background-color: #F8FAFC;
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
+
+    .badge-success { background: var(--success-bg); color: #065F46; border: 1px solid #A7F3D0; }
+    .badge-warning { background: var(--warning-bg); color: #92400E; border: 1px solid #FDE68A; }
+    .badge-danger { background: var(--danger-bg); color: #991B1B; border: 1px solid #FECACA; }
+    .badge-info { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+
+    /* ACTION CHECKLIST WIDGET */
+    .action-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .action-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .action-item:hover {
+      border-color: #CBD5E1;
+      background: #FFFFFF;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .action-item input[type="checkbox"] {
+      margin-top: 3px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: var(--primary-light);
+    }
+
+    .action-item-body {
+      flex: 1;
+    }
+
+    .action-item-body .title {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .action-item-body .meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    
+    /* NEXT 5 DAYS ACTION QUEUE STYLING */
+    .day-filter-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .day-filter-btn {
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .day-filter-btn:hover {
+      background: var(--border-subtle);
+      color: var(--text);
+    }
+
+    .day-filter-btn.active {
+      background: #1E3A8A;
+      color: #FFFFFF;
+      border-color: #1E3A8A;
+      box-shadow: 0 2px 6px rgba(30, 58, 138, 0.25);
+    }
+
+    .action-day-group {
+      margin-bottom: 16px;
+    }
+
+    .action-day-header {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #475569;
+      background: #F1F5F9;
+      padding: 4px 10px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .action-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-crm-quote { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+    .badge-crm-visit { background: #DBEAFE; color: #1E40AF; border: 1px solid #BFDBFE; }
+    .badge-crm-amc { background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; }
+    .badge-crm-winback { background: #FCE7F3; color: #9D174D; border: 1px solid #FBCFE8; }
+    .badge-crm-lead { background: #EDE9FE; color: #5B21B6; border: 1px solid #DDD6FE; }
+    .badge-crm-sync { background: #E2E8F0; color: #334155; border: 1px solid #CBD5E1; }
+
+    .action-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3px;
+    }
+
+    .action-crm-ref {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: #64748B;
+      font-weight: 600;
+    }
+
+
+    /* ==== TEAM 5-DAY BOARD & COVERAGE (GROUP HEAD) ==== */
+    .section-sub { font-size: 12.5px; color: #64748B; margin: 0 0 12px; line-height: 1.45; }
+    .team-day-summary { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .day-chip { flex: 1; min-width: 120px; background: #F8FAFC; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; }
+    .day-chip b { display: block; font-size: 15px; color: #1E3A8A; }
+    .day-chip span { font-size: 10.5px; color: #64748B; }
+    tr.rep-row { cursor: pointer; }
+    tr.rep-row:hover td { background: #F8FAFC; }
+    tr.rep-row.selected td { background: #EFF6FF !important; }
+    .day-count-cell b { font-size: 14px; color: #1E3A8A; }
+    .day-top-1 { font-size: 10.5px; color: #64748B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
+    .plan-detail { padding: 8px 4px 2px; border-top: 2px dashed #DBEAFE; margin-top: 10px; }
+    .plan-day-head { font-size: 12px; font-weight: 800; color: #334155; background: #F1F5F9; padding: 4px 10px; border-radius: 5px; display: inline-block; margin: 12px 0 6px; }
+    .plan-item { font-size: 12.5px; padding: 7px 12px; border-left: 3px solid #93C5FD; background: #FAFBFC; border-radius: 0 6px 6px 0; margin: 5px 0; line-height: 1.4; }
+    .plan-item .action-badge { margin-right: 4px; }
+    .plan-item .plan-title { font-weight: 700; color: #0F172A; }
+    .plan-item .plan-meta { color: #64748B; font-size: 11.5px; }
+    .plan-item .plan-ref { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #94A3B8; margin-left: 6px; }
+    .cov-pill { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 20px; }
+    .cov-good { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+    .cov-mid { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
+    .cov-bad { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+    .coverage-insight { margin-top: 16px; font-size: 12.5px; color: #334155; background: #F8FAFC; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; line-height: 1.55; }
+    .insight-highlight { font-weight: 800; color: #B91C1C; }
+
+
+    /* BOT / BOI ECONOMIC FORECASTING & SALES HEAD ACTION PLAN */
+    .bot-boi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .bot-boi-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+    }
+
+    .bot-boi-card h4 {
+      font-size: 14px;
+      font-weight: 800;
+      color: #1E3A8A;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .bot-boi-card p {
+      font-size: 12.5px;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    .sales-head-action-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .sales-head-action-table th {
+      background: #EFF6FF;
+      color: #1E40AF;
+      font-weight: 700;
+      padding: 10px 14px;
+      border-bottom: 1px solid #BFDBFE;
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .sales-head-action-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: #1E293B;
+      vertical-align: top;
+    }
+
+    /* COLLABORATION CALLOUT */
+    .collab-card {
+      background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+      border: 1px solid #BFDBFE;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .collab-left h4 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #1E40AF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .collab-left p {
+      font-size: 13px;
+      color: #1E3A8A;
+      margin-top: 4px;
+    }
+
+    .collab-btn {
+      background: #1D4ED8;
+      color: white;
+      border: none;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(29, 78, 216, 0.3);
+    }
+
+    .collab-btn:hover {
+      background: #1E40AF;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 30px 0 20px;
+      color: #94A3B8;
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+
+    /* PROGRESS BAR */
+    .progress-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .fill-blue { background: #3B82F6; }
+    .fill-green { background: #10B981; }
+    .fill-amber { background: #F59E0B; }
+    .fill-red { background: #EF4444; }
+  
+    /* SALES REP PROFILE BAR & SELECTOR */
+    .rep-selector-bar {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .rep-profile-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .rep-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 3px solid var(--primary-light);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #E2E8F0;
+      flex-shrink: 0;
+    }
+
+    .rep-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .rep-avatar:hover img {
+      transform: scale(1.08);
+    }
+
+    .mini-rep-thumb {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid #CBD5E1;
+      vertical-align: middle;
+      margin-right: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .rep-cell {
+      display: flex;
+      align-items: center;
+    }
+
+    .rep-details h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rep-details p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .rep-dropdown-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .rep-dropdown {
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      background: #F8FAFC;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 8px;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .rep-dropdown:hover, .rep-dropdown:focus {
+      border-color: var(--primary-light);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    /* SMART RECOMMENDATION CARDS (DBD, BOT, BOI) */
+    .rec-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .recommendation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    .rec-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .rec-card:hover {
+      border-color: #3B82F6;
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .rec-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .rec-priority-score {
+      background: #ECFDF5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .rec-company {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0F172A;
+    }
+
+    .rec-location {
+      font-size: 12px;
+      color: #64748B;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .rec-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 12px 0;
+    }
+
+    .rec-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pill-dbd { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+    .pill-bot { background: #DBEAFE; color: #1E40AF; border: 1px solid #BFDBFE; }
+    .pill-boi { background: #EDE9FE; color: #5B21B6; border: 1px solid #DDD6FE; }
+    .pill-crm { background: #FCE7F3; color: #9D174D; border: 1px solid #FBCFE8; }
+
+    .rec-body {
+      font-size: 13px;
+      color: #334155;
+      background: #F8FAFC;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .rec-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 14px;
+    }
+
+    .rec-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0F172A;
+    }
+
+    .rec-action-btn {
+      background: var(--primary-light);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .rec-action-btn:hover {
+      background: var(--primary);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="top-header">
+    <div class="brand-section">
+      <div class="brand-logo">SR</div>
+      <div class="brand-text">
+        <h1>SIAMRAJ PUBLIC COMPANY LIMITED <span class="badge">EPS BUSINESS UNIT</span></h1>
+        <p>Engineered Pumps & Systems (EPS) — Operational Sales Dashboard Ecosystem</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="live-status">
+        <span class="live-dot"></span>
+        <span>CRM Live Data: 20,871 SOs | 40,798 Quotes</span>
+      </div>
+      <button class="switch-btn" onclick="togglePresentationMode()">📺 Presentation View</button>
+    </div>
+  </header>
+
+  <!-- EMERGENCY ALERT BANNER -->
+  <div class="alert-banner">
+    <div class="alert-content">
+      <span class="alert-tag">Red-Flag Alert</span>
+      <span><strong>3 High-Value Quotations Stalled >45 Days:</strong> IRPC (18.2M THB), Bangchak (9.4M THB), SAS Tech (6.1M THB) require immediate executive intervention.</span>
+    </div>
+    <span class="alert-action" onclick="switchTab('sales-head')">Review Slipping Deals &rarr;</span>
+  </div>
+
+  <!-- NAVIGATION TABS -->
+  <nav class="nav-tabs-wrapper">
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('sales-rep')" id="tab-sales-rep">
+        <span>👤 1. Sales Representative</span>
+        <span class="role-badge">Daily</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('sales-head')" id="tab-sales-head">
+        <span>👥 2. Sales Group Head</span>
+        <span class="role-badge">Weekly</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('product-manager')" id="tab-product-manager">
+        <span>📦 3. Product Manager (Jom)</span>
+        <span class="role-badge">Monthly / Quotas</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('bu-manager')" id="tab-bu-manager">
+        <span>🏢 4. BU Manager (EPS)</span>
+        <span class="role-badge">Monthly P&L</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('ceo')" id="tab-ceo">
+        <span>👑 5. CEO & Board</span>
+        <span class="role-badge">Quarterly / Strategy</span>
+      </button>
+    </div>
+    <div class="mode-toggle">
+      <span>Fiscal Year: <strong>2026 (Q3)</strong></span>
+    </div>
+  </nav>
+
+  <!-- DASHBOARD CONTAINER -->
+  <main class="dashboard-container">
+
+    
+    <!-- ==================================================================== -->
+    <!-- 1. SALES REPRESENTATIVE VIEW -->
+    <!-- ==================================================================== -->
+    <div id="view-sales-rep" class="role-view active">
+      
+      <!-- REP SELECTOR & PROFILE BAR -->
+      <div class="rep-selector-bar">
+        <div class="rep-profile-left">
+          <div class="rep-avatar" id="repAvatar">
+            <img id="repAvatarImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80" alt="Sales Rep Portrait">
+          </div>
+          <div class="rep-details">
+            <h3 id="repName">Anan Prasert (อนันต์ ประเสริฐ) <span class="role-tag tag-blue" id="repTier">Senior Account Executive</span></h3>
+            <p id="repTerritory">📍 Assigned Zone: <strong>EEC Rayong — Map Ta Phut Petrochemical & Heavy Processing</strong> | Phone: 081-823-6922</p>
+          </div>
+        </div>
+
+        <div class="rep-dropdown-container">
+          <span style="font-size: 13px; font-weight: 700; color: #475569;">Switch Sales Rep:</span>
+          <select class="rep-dropdown" id="salesRepSelect" onchange="changeSalesRep(this.value)">
+            <option value="anan">Anan Prasert (EEC Rayong - Petrochem)</option>
+            <option value="somchai">Somchai Kiatwong (EEC Chonburi - Power & Heavy)</option>
+            <option value="nattawut">Nattawut Thongpan (BKK & Samut Prakan - General Mfg)</option>
+            <option value="wichai">Wichai Raksakul (Central & Saraburi - Water/Cement)</option>
+            <option value="kittisak">Kittisak Manop (Eastern Corridor - Data Center & New)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- KPI METRICS (DYNAMIC PER SALES REP) -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Month-to-Date Booking <span id="kpiTarget">🎯 Target: 3.00M</span></div>
+          <div class="kpi-value"><span id="kpiBooking">2.62M</span> <span style="font-size:16px;font-weight:600;color:var(--text-muted);">THB</span></div>
+          <div class="progress-bar-bg"><div class="progress-fill fill-green" id="kpiProgressBar" style="width: 87.3%;"></div></div>
+          <div class="kpi-sub"><span class="trend-up" id="kpiAttain">87.3% Attained</span> (11 days remaining)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Personal Active Pipeline <span>Weighted Value</span></div>
+          <div class="kpi-value"><span id="kpiPipeline">11.40M</span> <span style="font-size:16px;font-weight:600;color:var(--text-muted);">THB</span></div>
+          <div class="kpi-sub"><span class="trend-neutral" id="kpiQuotesCount">15 Open Quotations</span> across active clients</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Personal Win Rate <span>YTD 2026</span></div>
+          <div class="kpi-value" id="kpiWinRate">27.5%</div>
+          <div class="kpi-sub"><span class="trend-up" id="kpiPeerDiff">&uarr; +5.3%</span> vs team average (22.2%)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Stalled Quotes (&gt;30 Days) <span>Immediate Follow-Up</span></div>
+          <div class="kpi-value" id="kpiStalledCount" style="color: var(--danger);">3 <span style="font-size:16px;font-weight:600;color:var(--danger);">Quotes</span></div>
+          <div class="kpi-sub"><span class="trend-down" id="kpiStalledValue">Total 1.95M THB</span> pending client response</div>
+        </div>
+      </div>
+
+      <!-- STRATEGIC CLIENT VISIT RECOMMENDATIONS (DBD + BOT + BOI + CRM) -->
+      <div class="panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+          <h3>
+            🎯 AI Strategic Visit Recommendations for <span id="recRepName" style="color:var(--primary-light);">Anan</span>
+            <span class="rec-header-badge">Multi-Source Intelligence: DBD • BOT • BOI • CRM</span>
+          </h3>
+          <span class="badge-tag">Prioritized by Purchase Propensity & Macro Triggers</span>
+        </div>
+        
+        <p style="font-size: 13px; color: #64748B; margin-bottom: 8px;">
+          Recommended plant visits curated by correlating <strong>DBD registered machine horsepower (&gt;3,000 HP)</strong>, 
+          <strong>BOT private CapEx credit stimulus (1.00% rate)</strong>, <strong>BOI green incentive zones</strong>, and <strong>CRM purchase dormancy</strong>.
+        </p>
+
+        <!-- DYNAMIC RECOMMENDATION CARDS -->
+        <div class="recommendation-grid" id="recommendationsContainer">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- PERSONAL DEALS & DAILY TO-DO -->
+      <div class="dashboard-row">
+        <!-- PERSONAL OPPORTUNITY TABLE -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>🔥 Active Quotations to Close This Month (&ge; 70% Probability)</h3>
+            <span class="badge-tag">Real-Time CRM Feed</span>
+          </div>
+          <div class="data-table-wrapper">
+            <table class="data-table" id="dealsTable">
+              <thead>
+                <tr>
+                  <th>Quote Ref</th>
+                  <th>Client Account</th>
+                  <th>Equipment / Brand</th>
+                  <th>Value (THB)</th>
+                  <th>Stage</th>
+                  <th>Aging</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="dealsTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- NEXT 5 DAYS ACTION QUEUE (CRM PIPELINE & FOLLOW-UPS) -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>📅 Next 5 Days Action Queue <span style="font-size:12px;font-weight:600;color:var(--text-muted);">(CRM Scheduled & Pipeline Follow-ups)</span></h3>
+            <span class="badge-tag" id="taskBadgeCount">Loading actions...</span>
+          </div>
+          
+          <!-- DAY FILTER BAR -->
+          <div class="day-filter-bar">
+            <button class="day-filter-btn active" onclick="filterActionDays('all', this)">All 5 Days</button>
+            <button class="day-filter-btn" onclick="filterActionDays('d1', this)">Day 1 (Mon 07)</button>
+            <button class="day-filter-btn" onclick="filterActionDays('d2', this)">Day 2 (Tue 08)</button>
+            <button class="day-filter-btn" onclick="filterActionDays('d3', this)">Day 3 (Wed 09)</button>
+            <button class="day-filter-btn" onclick="filterActionDays('d4', this)">Day 4 (Thu 10)</button>
+            <button class="day-filter-btn" onclick="filterActionDays('d5', this)">Day 5 (Fri 11)</button>
+          </div>
+
+          <div class="action-list" id="todoListContainer" style="max-height: 480px; overflow-y: auto; padding-right: 4px;">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- 2. SALES GROUP HEAD VIEW -->
+    <!-- ==================================================================== -->
+    <div id="view-sales-head" class="role-view">
+      
+      <div class="role-intro">
+        <div class="role-intro-left">
+          <h2>2. Sales Group Head Cockpit <span class="role-tag tag-purple">Weekly Tactical</span></h2>
+          <p>Focus: Team quota attainment, sales funnel bottlenecks, rep coaching, and win/loss root cause diagnostics.</p>
+        </div>
+        <div class="role-cadence-pill">CADENCE: WEEKLY REVIEW (MONDAY 60 MINS)</div>
+      </div>
+
+      <!-- KPI METRICS -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Team Revenue vs Target <span>Monthly Budget: 18.0M</span></div>
+          <div class="kpi-value">13.82M <span style="font-size:16px;font-weight:600;color:var(--text-muted);">THB</span></div>
+          <div class="progress-bar-bg"><div class="progress-fill fill-green" style="width: 76.7%;"></div></div>
+          <div class="kpi-sub"><span class="trend-up">76.7% Attained</span> (Team on track)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Pipeline Coverage Ratio <span>Benchmark: &ge;3.0x</span></div>
+          <div class="kpi-value">3.42x</div>
+          <div class="kpi-sub"><span class="trend-up">&uarr; Healthy</span> 61.5M THB weighted pipeline</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Team Aggregate Win Rate <span>Quotes &rarr; Orders</span></div>
+          <div class="kpi-value">22.8%</div>
+          <div class="kpi-sub"><span class="trend-up">&uarr; +7.0%</span> from 2025 baseline (15.8%)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Win-Back Accounts Re-activated <span>Monthly Target: 12</span></div>
+          <div class="kpi-value" style="color: var(--primary);">9 / 12</div>
+          <div class="kpi-sub"><span class="trend-up">75% of target</span> (2.4M THB recovered)</div>
+        </div>
+      </div>
+
+      <!-- TEAM REP PERFORMANCE & FUNNEL -->
+      <div class="dashboard-row equal">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>📊 Rep Quota Attainment & Pipeline Health</h3>
+            <span class="badge-tag">6 Active Account Executives</span>
+          </div>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Sales Rep</th>
+                  <th>Quota (M)</th>
+                  <th>Closed (M)</th>
+                  <th>Attainment</th>
+                  <th>Pipeline (M)</th>
+                  <th>Win Rate</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="rep-cell"><img class="mini-rep-thumb" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80"><strong>Somchai K.</strong></div></td>
+                  <td>3.00</td>
+                  <td>2.85</td>
+                  <td><span class="trend-up">95.0%</span></td>
+                  <td>9.80</td>
+                  <td>31.2%</td>
+                  <td><span class="badge-status badge-success">Top Performer</span></td>
+                </tr>
+                <tr>
+                  <td><div class="rep-cell"><img class="mini-rep-thumb" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80"><strong>Anan P.</strong></div></td>
+                  <td>3.00</td>
+                  <td>2.62</td>
+                  <td><span class="trend-up">87.3%</span></td>
+                  <td>11.40</td>
+                  <td>27.5%</td>
+                  <td><span class="badge-status badge-success">On Track</span></td>
+                </tr>
+                <tr>
+                  <td><div class="rep-cell"><img class="mini-rep-thumb" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80"><strong>Wichai R.</strong></div></td>
+                  <td>3.00</td>
+                  <td>2.10</td>
+                  <td><span class="trend-neutral">70.0%</span></td>
+                  <td>8.50</td>
+                  <td>21.8%</td>
+                  <td><span class="badge-status badge-warning">Needs Push</span></td>
+                </tr>
+                <tr>
+                  <td><div class="rep-cell"><img class="mini-rep-thumb" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80"><strong>Nattawut T.</strong></div></td>
+                  <td>3.00</td>
+                  <td>1.84</td>
+                  <td><span class="trend-neutral">61.3%</span></td>
+                  <td>14.20</td>
+                  <td>26.4%</td>
+                  <td><span class="badge-status badge-warning">Large Pipeline</span></td>
+                </tr>
+                <tr>
+                  <td><div class="rep-cell"><img class="mini-rep-thumb" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&auto=format&fit=crop&q=80"><strong>Kittisak M.</strong></div></td>
+                  <td>3.00</td>
+                  <td>1.35</td>
+                  <td><span class="trend-down">45.0%</span></td>
+                  <td>5.20</td>
+                  <td>14.1%</td>
+                  <td><span class="badge-status badge-danger">Coaching Required</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>🔍 Win/Loss Root Cause Analysis (Last 90 Days)</h3>
+            <span class="badge-tag">Sample: 218 Closed Deals</span>
+          </div>
+          <div style="height: 240px; position: relative;">
+            <canvas id="winLossChart"></canvas>
+          </div>
+          <div style="margin-top: 15px; font-size: 12px; color: var(--text-muted); line-height: 1.4;">
+            <strong>Key Insight:</strong> 42% of lost deals cite "Competitor Price" (Chinese imports), but 28% were lost due to "Slow Response / Lead Time". Faster follow-up directly elevates win rate.
+          </div>
+        </div>
+      </div>
+
+      <!-- COLLABORATION CALLOUT WITH PM -->
+      <div class="collab-card">
+        <div class="collab-left">
+          <h4>🤝 Cross-Functional Sync with Product Manager (Jom)</h4>
+          <p>Scheduled Wednesday 10:00 AM: Align on Goulds & Howden quotas. Jom has pre-approved a flexible PO volume commitment for Indorama & SCG tenders.</p>
+        </div>
+        <button class="collab-btn" onclick="switchTab('product-manager')">View PM Supplier Quotas &rarr;</button>
+      </div>
+
+
+      <!-- ================= TEAM NEXT 5-DAYS EXECUTION BOARD ================= -->
+      <div class="panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+          <h3>📅 Team Next-5-Days Execution Board <span style="font-size:12px;font-weight:600;color:var(--text-muted);">(Roll-up of all Sales Reps — click a row to expand that rep's full plan)</span></h3>
+          <span class="badge-tag">Auto Roll-up from CRM Schedules</span>
+        </div>
+        <p class="section-sub">
+          Combined 5-day forward plan across the whole sales team. Each day cell shows the number of CRM-scheduled actions for that rep plus their priority task.
+          Total actions per day are summarized in the chips below. Click any rep row to expand their complete day-by-day plan (with CRM references).
+        </p>
+        <div class="team-day-summary" id="teamDaySummary"><i style="color:#94A3B8;">Loading day totals...</i></div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Sales Rep</th>
+                <th>Day 1 (Mon 07)</th>
+                <th>Day 2 (Tue 08)</th>
+                <th>Day 3 (Wed 09 · PM Sync)</th>
+                <th>Day 4 (Thu 10)</th>
+                <th>Day 5 (Fri 11)</th>
+                <th>5-Day Total</th>
+              </tr>
+            </thead>
+            <tbody id="teamBoardBody"><tr><td colspan="7" style="color:#94A3B8;">Loading team schedule...</td></tr></tbody>
+          </table>
+        </div>
+        <div id="teamPlanDetail" class="plan-detail"></div>
+      </div>
+
+      <!-- ================= ACCOUNT VISIT COVERAGE (12-MONTH) ================= -->
+      <div class="dashboard-row equal">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>📋 Account Portfolio vs Last 12-Month Visits</h3>
+            <span class="badge-tag">Coverage Audit (CRM Visit Logs)</span>
+          </div>
+          <p class="section-sub">
+            Accounts owned by each rep vs. how recently each was visited. <strong>Accounts untouched &gt;12 months are silent churn risks</strong>
+            — they feed the Win-Back and AMC conversion queues. The right-hand column compares planned on-site visits in the next 5 days against the at-risk gap.
+          </p>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Sales Rep</th>
+                  <th>Accounts Owned</th>
+                  <th>Visited ≤3m</th>
+                  <th>3–6m</th>
+                  <th>6–12m</th>
+                  <th>&gt;12m (At Risk)</th>
+                  <th>Coverage ≤6m</th>
+                  <th>Visits Planned (5D)</th>
+                  <th>Health</th>
+                </tr>
+              </thead>
+              <tbody id="coverageBody"><tr><td colspan="9" style="color:#94A3B8;">Loading coverage...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>🎯 Visit Coverage Health vs 70% Target</h3>
+            <span class="badge-tag">Share of Portfolio Contacted ≤6 Months</span>
+          </div>
+          <div style="height: 250px; position: relative;">
+            <canvas id="coverageChart"></canvas>
+          </div>
+          <div class="coverage-insight" id="coverageInsight">Loading insight...</div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================================== -->
+    <!-- 3. PRODUCT MANAGER VIEW (JOM) -->
+    <!-- ==================================================================== -->
+    <div id="view-product-manager" class="role-view">
+      
+      <div class="role-intro">
+        <div class="role-intro-left">
+          <h2>3. Product Manager Command Center (Jom) <span class="role-tag tag-amber">Monthly Brand & Supplier Strategy</span></h2>
+          <p>Focus: Supplier annual purchase order volume to factory commitments (Quotas), tiered rebates, PO tracking, and dead stock liquidation.</p>
+        </div>
+        <div class="role-cadence-pill">CADENCE: MONTHLY / TUESDAY STOCK AUDIT</div>
+      </div>
+
+      <!-- KPI METRICS -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Annual Supplier Quota Progress <span>Contract Baseline: 120M</span></div>
+          <div class="kpi-value">84.5M <span style="font-size:16px;font-weight:600;color:var(--text-muted);">THB</span></div>
+          <div class="progress-bar-bg"><div class="progress-fill fill-amber" style="width: 70.4%;"></div></div>
+          <div class="kpi-sub"><span class="trend-up">70.4% Committed</span> (Pacing on plan)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Estimated Supplier Rebates <span>Accrued YTD</span></div>
+          <div class="kpi-value" style="color: var(--success);">4.25M <span style="font-size:16px;font-weight:600;color:var(--success);">THB</span></div>
+          <div class="kpi-sub"><span class="trend-up">&uarr; Tier-2 Reached</span> across IDEX & Goulds</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Warehouse Inventory Holding <span>Total Valuation</span></div>
+          <div class="kpi-value">31.35M <span style="font-size:16px;font-weight:600;color:var(--text-muted);">THB</span></div>
+          <div class="kpi-sub"><span class="trend-neutral">Turns: 4.8x/yr</span> (Safety buffer OK)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Flagged Dead Stock (&gt;6 Months) <span>Target: &lt;3.0M</span></div>
+          <div class="kpi-value" style="color: var(--danger);">5.82M <span style="font-size:16px;font-weight:600;color:var(--danger);">THB</span></div>
+          <div class="kpi-sub"><span class="trend-down">Requires Promo Clearance</span> (18 items)</div>
+        </div>
+      </div>
+
+
+      <!-- ================= BOT & BOI MACRO FORECASTING & SALES HEAD ACTION PLAN ================= -->
+      <div class="panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+          <h3>📈 Macroeconomic Forecasting (BOT & BOI) & Action Plan for Sales Group Heads</h3>
+          <span class="badge-tag">Product Manager Strategic Direction (Jom)</span>
+        </div>
+        <p class="section-sub">
+          Translating Bank of Thailand (BOT) macroeconomic indicators and Board of Investment (BOI) industrial promotion policies into concrete product-line strategies and action directives for Sales Group Heads.
+        </p>
+
+        <!-- MACRO CARDS -->
+        <div class="bot-boi-grid">
+          <div class="bot-boi-card">
+            <h4>🏭 BOT: Manufacturing Production Index (MPI)</h4>
+            <p>ดัชนีผลผลิตอุตสาหกรรม (MPI) ล่าสุดฟื้นตัวที่ระดับ ~98.5 จุด (YoY +2.1%) นำโดยกลุ่มอิเล็กทรอนิกส์ อาหาร และยานยนต์ สะท้อนความต้องการเครื่องจักรและปั๊มในสายการผลิตที่เริ่มกลับมาขยายตัว</p>
+          </div>
+          <div class="bot-boi-card">
+            <h4>⚙️ BOT: Capacity Utilization (CAPU) ~60-62%</h4>
+            <p>อัตราการใช้กำลังผลิตอุตสาหกรรมปิโตรเคมีและเคมีภัณฑ์ทรงตัวที่ 60-62% เป็นโอกาสทองในการนำเสนอแพ็กเกจปรับปรุงประสิทธิภาพพลังงาน (Energy Efficiency Audit & Retrofit) แทนการซื้อเครื่องจักรใหม่</p>
+          </div>
+          <div class="bot-boi-card">
+            <h4>🏦 BOT: Private CapEx +13.4% (Q2/69) & Policy Rate 1.00%</h4>
+            <p>ลงทุนภาคเอกชน Q1 +10.1% / Q2 +13.4% (สูงสุดรอบ 14 ไตรมาส) ดอกเบี้ย 1.00% + ส่งออก H1 +17.6% → โรงงาน Upper K (อิเล็กทรอนิกส์/อาหาร/เคมี) ลงทุนจริงตอนนี้ — ยิง engineered pumps + AMC</p>
+          </div>
+          <div class="bot-boi-card">
+            <h4>⚡ BOI: Data Center Boom in EEC ($16B Inflow)</h4>
+            <p>อนุมัติลงทุน Data Center กว่า 44+ โครงการ ($16B) ต้องการระบบหล่อเย็น (Chilled Water Pump Skids) และระบบหมุนเวียนน้ำอุณหภูมิสูงต่อเนื่อง 24/7</p>
+          </div>
+        </div>
+
+        <!-- BOT & OIE SECTOR-WISE MACRO TREND CHART & SECTOR BREAKDOWN -->
+        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 20px; margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h4 style="font-size: 14px; font-weight: 800; color: #0F172A;">📊 OIE & BOT Sector-wise MPI & Capacity Utilization (Industrial Sectors)</h4>
+            <span class="badge-tag">Office of Industrial Economics (OIE) & BOT Data</span>
+          </div>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+            Tracking Manufacturing Production Index (MPI) and Capacity Utilization (CapU) segmented by key industrial sectors relevant to Siamraj EPS (Petrochemicals, Food & Beverage, Automotive, Electronics).
+          </p>
+          
+          <div style="height: 240px; position: relative; margin-bottom: 16px;">
+            <canvas id="macroSectorChart"></canvas>
+          </div>
+
+          <!-- SECTOR SELECTION TABLE FOR SALES HEADS (20 OIE/BOT SECTORS) -->
+          <div class="data-table-wrapper" style="max-height: 380px; overflow-y: auto;">
+            <table class="sales-head-action-table">
+              <thead>
+                <tr>
+                  <th>Industrial Sector (OIE / CSV Data)</th>
+                  <th>Capacity Utilization (CapU %)</th>
+                  <th>EPS Product Line Alignment</th>
+                  <th>Sales Group Head Strategy & Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>1. Pick-up Trucks</strong></td><td><strong>51.7%</strong></td><td>General Utility Pumps, Waste Water Treatment</td><td>Monitor vehicle assembly lines for wastewater and coolant system maintenance.</td></tr>
+                <tr><td><strong>2. Passenger Cars</strong></td><td><strong>42.4%</strong></td><td>Coolant Circulation, Fluid Transfer</td><td>Low utilization; focus strictly on essential repair and maintenance services.</td></tr>
+                <tr><td><strong>3. Storage Devices (HDD/SSD)</strong></td><td><strong>49.3%</strong></td><td>Chilled Water Pumps, Cleanroom HVAC Skids</td><td>Target electronics assembly plants in Ayutthaya / Pathum Thani for HVAC upkeep.</td></tr>
+                <tr><td><strong>4. Plastic Pallets & Resins</strong></td><td><strong>67.2%</strong></td><td>Viking Gear Pumps, Polymer Transfer Pumps</td><td>High CapU; push positive displacement pumps for viscous polymer and resin transfer.</td></tr>
+                <tr><td><strong>5. Semiconductors & IC</strong></td><td><strong>98.1%</strong></td><td>Ultrapure Water Pumps, Chilled Water Skids</td><td>Booming sector! Immediate sales push for closed-loop chilled water & UPW pumps.</td></tr>
+                <tr><td><strong>6. Industrial Refrigeration</strong></td><td><strong>46.8%</strong></td><td>Compressor Spares, Refrigerant Pumps</td><td>Target cold storage facilities for energy efficiency audit and compressor overhauls.</td></tr>
+                <tr><td><strong>7. Plastic Packaging</strong></td><td><strong>47.8%</strong></td><td>Extruder Cooling Pumps, Hydraulic Fluids</td><td>Pitch preventive maintenance contracts for extrusion machinery cooling loops.</td></tr>
+                <tr><td><strong>8. Printed Circuit Boards (PCB)</strong></td><td><strong>52.0%</strong></td><td>Chemical Dosing Pumps, Acid Waste Pumps</td><td>Target PCB etching lines for chemical-resistant diaphragm and dosing pumps.</td></tr>
+                <tr><td><strong>9. Rubber Plates & Sheets</strong></td><td><strong>51.5%</strong></td><td>Heavy-duty Slurry & Process Pumps</td><td>Align with rubber processing plants in Eastern & Southern regions.</td></tr>
+                <tr><td><strong>10. Pet Foods</strong></td><td><strong>56.1%</strong></td><td>Sanitary Stainless Steel Pumps (Waukesha)</td><td>Stable food sector demand; pitch hygienic pumps and quick-lead-time spares.</td></tr>
+                <tr><td><strong>11. Concrete Articles</strong></td><td><strong>52.9%</strong></td><td>Slurry Pumps, Water Jet Cutting Pumps</td><td>Target pre-cast concrete factories for abrasive slurry handling pumps.</td></tr>
+                <tr><td><strong>12. Palm Oil</strong></td><td><strong>45.8%</strong></td><td>Viking Gear Pumps, High-Viscosity Pumps</td><td>Target southern palm oil mills for high-viscosity oil transfer gear pumps.</td></tr>
+                <tr><td><strong>13. Iron & Steel</strong></td><td><strong>53.5%</strong></td><td>Cooling Tower Pumps, Heavy Slurry Pumps</td><td>Target steel mills (Millcon, G Steel) for high-capacity cooling water circulation.</td></tr>
+                <tr><td><strong>14. Rubber Tyres & Tubes</strong></td><td><strong>63.9%</strong></td><td>Banbury Mixer Pumps, Chemical Dosing</td><td>Good utilization; target Bridgestone, Michelin, GoodYear plants for pump overhaul.</td></tr>
+                <tr><td><strong>15. Medical Instruments</strong></td><td><strong>51.5%</strong></td><td>RO Water Pumps, Pure Steam Compressors</td><td>Target medical device manufacturing cleanrooms for high-purity water circulation.</td></tr>
+                <tr><td><strong>16. Poultry Slaughtering</strong></td><td><strong>75.4%</strong></td><td>Sanitary Washdown Pumps, Wastewater Dosing</td><td>Very high CapU! Target CPF and Betagro processing plants for sanitation pumps.</td></tr>
+                <tr><td><strong>17. Steel Sheets</strong></td><td><strong>36.4%</strong></td><td>Coolant & Quenching Pumps</td><td>Subdued sector; offer low-cost overhaul services rather than new equipment.</td></tr>
+                <tr><td><strong>18. Ready-mixed Concrete</strong></td><td><strong>64.0%</strong></td><td>Batching Plant Water Dosing Pumps</td><td>Target batching plant operators for reliable water dosing and transfer pumps.</td></tr>
+                <tr><td><strong>19. Pharmaceuticals</strong></td><td><strong>45.7%</strong></td><td>Sanitary Diaphragm Pumps, WFI Pumps</td><td>Target pharma plants in Bangkok/Samut Prakan for sanitary fluid transfer.</td></tr>
+                <tr><td><strong>20. Inorganic Chemicals</strong></td><td><strong>66.3%</strong></td><td>Goulds Process Pumps, Warren Rupp AODD</td><td>Strong chemical demand; pitch corrosion-resistant process pumps and spares.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ACTION PLAN COMMUNICATED TO SALES HEADS -->
+        <h4 style="font-size: 14px; font-weight: 800; color: #0F172A; margin: 20px 0 10px;">📋 Action Plan & Directives Communicated to Sales Group Heads</h4>
+        <div class="data-table-wrapper">
+          <table class="sales-head-action-table">
+            <thead>
+              <tr>
+                <th>Market Tailwind / Indicator</th>
+                <th>Product Line Focus (EPS)</th>
+                <th>Directives for Sales Group Heads</th>
+                <th>Target Accounts / Segments</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. BOT CapEx Acceleration (+13.4% Q2)</strong></td>
+                <td>Engineered Process Pumps (Goulds GP, KSB KB)</td>
+                <td>Instruct reps to pivot from reactive repairs to proactive plant revamp proposals. Leverage low borrowing rates to pitch complete skid replacements.</td>
+                <td>Petrochemical plants in Map Ta Phut, Cement plants in Saraburi</td>
+              </tr>
+              <tr>
+                <td><strong>2. BOI Data Center Boom ($16B)</strong></td>
+                <td>Chilled Water Circulation & Skids (Xylem, Goulds)</td>
+                <td>Assign dedicated technical sales reps to track hyperscale EPC contractors (TTCL, Wood, STT GDC). Propose closed-loop cooling pump packages.</td>
+                <td>EEC Data Center Campuses (Chonburi / Rayong)</td>
+              </tr>
+              <tr>
+                <td><strong>3. BOI Energy Efficiency / ESG</strong></td>
+                <td>Pump Retrofits & IE5 High-Efficiency Motors</td>
+                <td>Package pump overhauls with energy-saving audits. Show clients 1-2 year payback from electricity tariff reduction under BOT energy outlook.</td>
+                <td>All Tier-1 Active Accounts (Shell, PTT, IRPC, Dow)</td>
+              </tr>
+              <tr>
+                <td><strong>4. PM Supplier Quota Alignment</strong></td>
+                <td>Viking (VK) & Warren Rupp (WR) Volume Push</td>
+                <td>Coordinate weekly with PM Jom to align rep quotas with supplier thresholds. Ensure Tier-3/Tier-2 rebate milestones are fully secured before Q4 close.</td>
+                <td>Entire EPS Sales Force (All Territories)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <!-- SUPPLIER COMMITMENTS TABLE -->
+      <div class="panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+          <h3>📋 Annual Manufacturer Contract Quotas & Rebate Progress (PM Master Sheet)</h3>
+          <span class="badge-tag">Manual Feed Updated Aug 31, 2026</span>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Brand / Manufacturer</th>
+                <th>Category</th>
+                <th>Annual Commitment</th>
+                <th>Actual Orders YTD</th>
+                <th>Pacing %</th>
+                <th>Rebate Tier</th>
+                <th>Projected Cash Rebate</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Viking Pump (IDEX)</strong></td>
+                <td>Gear Pump (Commodity)</td>
+                <td>45,000,000 THB</td>
+                <td>34,200,000 THB</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="progress-bar-bg" style="width:80px;"><div class="progress-fill fill-green" style="width:76%;"></div></div>
+                    <span>76%</span>
+                  </div>
+                </td>
+                <td>Tier 3 (5.0%)</td>
+                <td><strong>1,710,000 THB</strong></td>
+                <td><span class="badge-status badge-success">On Track</span></td>
+              </tr>
+              <tr>
+                <td><strong>Warren Rupp (IDEX)</strong></td>
+                <td>AODD Diaphragm</td>
+                <td>20,000,000 THB</td>
+                <td>15,800,000 THB</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="progress-bar-bg" style="width:80px;"><div class="progress-fill fill-green" style="width:79%;"></div></div>
+                    <span>79%</span>
+                  </div>
+                </td>
+                <td>Tier 2 (4.0%)</td>
+                <td><strong>632,000 THB</strong></td>
+                <td><span class="badge-status badge-success">On Track</span></td>
+              </tr>
+              <tr>
+                <td><strong>Goulds Pumps (ITT)</strong></td>
+                <td>Engineered Process</td>
+                <td>30,000,000 THB</td>
+                <td>18,400,000 THB</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="progress-bar-bg" style="width:80px;"><div class="progress-fill fill-amber" style="width:61%;"></div></div>
+                    <span>61%</span>
+                  </div>
+                </td>
+                <td>Tier 1 (2.5%)</td>
+                <td><strong>460,000 THB</strong></td>
+                <td><span class="badge-status badge-warning">Needs +4.6M by Q4</span></td>
+              </tr>
+              <tr>
+                <td><strong>Howden Compressor</strong></td>
+                <td>Screw / Turbo Compressors</td>
+                <td>15,000,000 THB</td>
+                <td>7,100,000 THB</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="progress-bar-bg" style="width:80px;"><div class="progress-fill fill-red" style="width:47%;"></div></div>
+                    <span>47%</span>
+                  </div>
+                </td>
+                <td>Base (1.5%)</td>
+                <td><strong>106,500 THB</strong></td>
+                <td><span class="badge-status badge-danger">At Risk (ITC/Wall Tech Push)</span></td>
+              </tr>
+              <tr>
+                <td><strong>Corken (CK)</strong></td>
+                <td>Vapor Compressors</td>
+                <td>10,000,000 THB</td>
+                <td>6,900,000 THB</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="progress-bar-bg" style="width:80px;"><div class="progress-fill fill-green" style="width:69%;"></div></div>
+                    <span>69%</span>
+                  </div>
+                </td>
+                <td>Tier 2 (3.5%)</td>
+                <td><strong>241,500 THB</strong></td>
+                <td><span class="badge-status badge-success">On Track</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="dashboard-row equal">
+        <!-- BRAND PO VOLUME MATRIX -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>📦 Purchase Order Volume to Factory by Brand (YTD vs Quota)</h3>
+            <span class="badge-tag">Target: 120M Total PO</span>
+          </div>
+          <div style="height: 230px; position: relative;">
+            <canvas id="brandMarginChart"></canvas>
+          </div>
+        </div>
+
+        <!-- DEAD STOCK LIQUIDATION QUEUE -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>⚠️ Dead Stock Liquidation Actions (&gt;180 Days Aging)</h3>
+            <span class="badge-tag">Clearance Budget: 15% Max Disc</span>
+          </div>
+          <div class="action-list">
+            <div class="action-item">
+              <input type="checkbox">
+              <div class="action-item-body">
+                <div class="title">Bundle 4x Pompetravaini (TN) Vacuum Pumps with Service</div>
+                <div class="meta">Inventory: 1.45M THB • Aging: 240 Days • Offer to Petrochem revamp accounts</div>
+              </div>
+            </div>
+            <div class="action-item">
+              <input type="checkbox">
+              <div class="action-item-body">
+                <div class="title">Disclose Wilden (WF) Saniflo Diaphragm Stock to F&B Team</div>
+                <div class="meta">Inventory: 890K THB • Aging: 210 Days • Special 12% clearance rebate</div>
+              </div>
+            </div>
+            <div class="action-item">
+              <input type="checkbox">
+              <div class="action-item-body">
+                <div class="title">Re-allocate Goulds Stainless Impellers to Active Maintenance</div>
+                <div class="meta">Inventory: 620K THB • Aging: 195 Days • Convert into AMC service kit</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================================== -->
+    <!-- 4. BU MANAGER VIEW (EPS) -->
+    <!-- ==================================================================== -->
+    <div id="view-bu-manager" class="role-view">
+      
+      <div class="role-intro">
+        <div class="role-intro-left">
+          <h2>4. EPS Business Unit Individualized Performance Control <span class="role-tag tag-green">Monthly Individual Governance</span></h2>
+          <p>Focus: Individual sales rep performance tracking, quota attainment, win-back execution, and individual contribution to the 300M revenue goal (S1-S5).</p>
+        </div>
+        <div class="role-cadence-pill">CADENCE: MONTHLY INDIVIDUAL REVIEW</div>
+      </div>
+
+      <!-- KPI METRICS -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">EPS Revenue YTD <span>FY2026 Target: 266M</span></div>
+          <div class="kpi-value">136.9M <span style="font-size:16px;font-weight:600;color:var(--text-muted);">THB</span></div>
+          <div class="progress-bar-bg"><div class="progress-fill fill-green" style="width: 51.5%;"></div></div>
+          <div class="kpi-sub"><span class="trend-up">&uarr; +14.2% YoY</span> vs FY2025 (120M)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Gross Margin Contribution <span>Target: &ge; 24.0%</span></div>
+          <div class="kpi-value">25.4%</div>
+          <div class="kpi-sub"><span class="trend-up">&uarr; +2.1%</span> due to engineered mix push</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Order Backlog (Book-to-Bill) <span>Next 12 Months</span></div>
+          <div class="kpi-value">48.2M <span style="font-size:16px;font-weight:600;color:var(--text-muted);">THB</span></div>
+          <div class="kpi-sub"><span class="trend-neutral">Book-to-Bill: 1.18x</span> (Healthy incoming)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">300M Goal: Revenue Add-on Progress <span>vs +120M Add-on</span></div>
+          <div class="kpi-value" style="color: var(--success);">+58.4M <span style="font-size:16px;font-weight:600;color:var(--success);">/ 100M</span></div>
+          <div class="progress-bar-bg"><div class="progress-fill fill-green" style="width: 58.4%;"></div></div>
+          <div class="kpi-sub"><span class="trend-up">On Track</span> across 4 growth levers</div>
+        </div>
+      </div>
+
+      <!-- 5 SIAMRAJ EPS GROUPS PERFORMANCE TABLE -->
+      <div class="panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+          <h3>🏢 Siamraj EPS 5 Sales Groups Performance & Quota Tracking</h3>
+          <span class="badge-tag">Group-level Governance (Groups A to R)</span>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Sales Group / Email Group</th>
+                <th>Focus Market / Industry Segment</th>
+                <th>Annual Quota</th>
+                <th>Actual Closed YTD</th>
+                <th>Achievement %</th>
+                <th>Win-Back Executed</th>
+                <th>AMC Contracts</th>
+                <th>Group Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Group A</strong> <span style="font-size:11px;color:var(--text-muted);">(eps_group_a@)</span></td>
+                <td>Animal Feed & Agricultural Processing</td>
+                <td>35,000,000 THB</td>
+                <td>24,500,000 THB</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="progress-bar-bg" style="width:80px;"><div class="progress-fill fill-green" style="width:70%;"></div></div>
+                    <span>70%</span>
+                  </div>
+                </td>
+                <td>18 Accounts</td>
+                <td>14 Contracts</td>
+                <td><span class="badge-status badge-success">On Track</span></td>
+              </tr>
+              <tr>
+                <td><strong>Group B</strong> <span style="font-size:11px;color:var(--text-muted);">(eps_group_b@)</span></td>
+                <td>Chemicals & Wastewater Treatment</td>
+                <td>30,000,000 THB</td>
+                <td>21,000,000 THB</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="progress-bar-bg" style="width:80px;"><div class="progress-fill fill-green" style="width:70%;"></div></div>
+                    <span>70%</span>
+                  </div>
+                </td>
+                <td>22 Accounts</td>
+                <td>18 Contracts</td>
+                <td><span class="badge-status badge-success">On Track</span></td>
+              </tr>
+              <tr>
+                <td><strong>Group C</strong> <span style="font-size:11px;color:var(--text-muted);">(eps_group_c@)</span></td>
+                <td>Cosmetics, Pharma & Rubber</td>
+                <td>28,000,000 THB</td>
+                <td>16,500,000 THB</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="progress-bar-bg" style="width:80px;"><div class="progress-fill fill-amber" style="width:58%;"></div></div>
+                    <span>58%</span>
+                  </div>
+                </td>
+                <td>12 Accounts</td>
+                <td>8 Contracts</td>
+                <td><span class="badge-status badge-warning">Needs +4.5M Q4</span></td>
+              </tr>
+              <tr>
+                <td><strong>Group D</strong> <span style="font-size:11px;color:var(--text-muted);">(eps_group_d@)</span></td>
+                <td>Oil & Gas, Power Plants</td>
+                <td>25,000,000 THB</td>
+                <td>13,500,000 THB</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="progress-bar-bg" style="width:80px;"><div class="progress-fill fill-red" style="width:54%;"></div></div>
+                    <span>54%</span>
+                  </div>
+                </td>
+                <td>9 Accounts</td>
+                <td>6 Contracts</td>
+                <td><span class="badge-status badge-danger">Review Required</span></td>
+              </tr>
+              <tr>
+                <td><strong>Group R</strong> <span style="font-size:11px;color:var(--text-muted);">(eps_group_r@)</span></td>
+                <td>Rayong / Eastern Region Hub</td>
+                <td>22,000,000 THB</td>
+                <td>15,400,000 THB</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="progress-bar-bg" style="width:80px;"><div class="progress-fill fill-green" style="width:70%;"></div></div>
+                    <span>70%</span>
+                  </div>
+                </td>
+                <td>15 Accounts</td>
+                <td>12 Contracts</td>
+                <td><span class="badge-status badge-success">On Track</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================================== -->
+    <!-- 5. CEO & BOARD VIEW -->
+    <!-- ==================================================================== -->
+    <div id="view-ceo" class="role-view">
+      
+      <div class="role-intro">
+        <div class="role-intro-left">
+          <h2>5. Executive Board & CEO Radar <span class="role-tag tag-navy">Quarterly Governance</span></h2>
+          <p>Focus: Enterprise EBITDA contribution, debt service coverage, recurring revenue quality, and strategic market positioning.</p>
+        </div>
+        <div class="role-cadence-pill">CADENCE: QUARTERLY GOVERNANCE / BOARD DECK</div>
+      </div>
+
+      <!-- KPI METRICS -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">EPS Contribution to Corporate EBITDA <span>Core Operating Profit</span></div>
+          <div class="kpi-value" style="color:var(--success);">+38.5M <span style="font-size:16px;font-weight:600;color:var(--success);">THB</span></div>
+          <div class="kpi-sub"><span class="trend-up">Profitable Core</span> offsetting non-core units</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Revenue Quality Ratio (Recurring) <span>Target: &ge; 25.0%</span></div>
+          <div class="kpi-value">22.4%</div>
+          <div class="kpi-sub"><span class="trend-up">&uarr; +8.2%</span> via AMC & genuine spare parts</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Top 10 Client Concentration <span>Risk Threshold: &lt;50%</span></div>
+          <div class="kpi-value">38.2%</div>
+          <div class="kpi-sub"><span class="trend-up">&uarr; Diversified</span> (Resilient customer base)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">Data Center Opportunity Pipeline <span>EEC Emerging Sector</span></div>
+          <div class="kpi-value">28.0M <span style="font-size:16px;font-weight:600;color:var(--text-muted);">THB</span></div>
+          <div class="kpi-sub"><span class="trend-up">3 Hyperscale Projects</span> bidding in 2026/27</div>
+        </div>
+      </div>
+
+      <div class="dashboard-row equal">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>🛡️ Enterprise Risk & Market Resilience Matrix</h3>
+            <span class="badge-tag">Executive Risk Radar</span>
+          </div>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Risk Factor</th>
+                  <th>Impact Level</th>
+                  <th>Observed Trend</th>
+                  <th>Mitigation Strategy Deployed</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Low-cost Chinese Pump Imports</strong></td>
+                  <td><span class="badge-status badge-danger">High</span></td>
+                  <td>Aggressive price erosion in commodity AODD</td>
+                  <td>Shift to Goulds engineered API pumps + AMC bundled service contracts</td>
+                </tr>
+                <tr>
+                  <td><strong>Macro Interest & CapEx Delays</strong></td>
+                  <td><span class="badge-status badge-warning">Medium</span></td>
+                  <td>BOT Policy Rate at 1.00% stimulates borrowing</td>
+                  <td>Offer energy-saving pump retrofit financing and IE4 motor packages</td>
+                </tr>
+                <tr>
+                  <td><strong>Foreign Exchange Volatility (USD/EUR)</strong></td>
+                  <td><span class="badge-status badge-warning">Medium</span></td>
+                  <td>Import procurement margin compression</td>
+                  <td>Enforce 30-day quote expiration limits & forward contract hedging</td>
+                </tr>
+                <tr>
+                  <td><strong>Loss of Tier-1 Supplier Exclusivity</strong></td>
+                  <td><span class="badge-status badge-success">Low</span></td>
+                  <td>All master distributor agreements active</td>
+                  <td>PM Master Control ensures 100% annual quota and rebate threshold compliance</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>🏢 Strategic Growth Trajectory: Base (180M) vs 300M Goal</h3>
+            <span class="badge-tag">Target: 266M THB Run-Rate</span>
+          </div>
+          <div style="height: 240px; position: relative;">
+            <canvas id="ceoTrajectoryChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>SIAMRAJ PUBLIC COMPANY LIMITED &bull; EPS SALES MANAGEMENT DASHBOARD ECOSYSTEM &bull; PREPARED FOR PRESENTATION</p>
+    <p style="margin-top: 4px;">Data grounded in CRM Production Database (20,871 SOs, 40,798 Quotes) &bull; Bank of Thailand Q2/2026 Intelligence &bull; DBD Census</p>
+  </footer>
+
+  <!-- SCRIPT FOR TABS & CHARTS -->
+  <script>
+    // Tab Switching Function
+    function switchTab(roleId) {
+      document.querySelectorAll('.role-view').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+
+      const targetView = document.getElementById('view-' + roleId);
+      const targetTab = document.getElementById('tab-' + roleId);
+
+      if (targetView && targetTab) {
+        targetView.classList.add('active');
+        targetTab.classList.add('active');
+      }
+    }
+
+    // Toggle Presentation Fullscreen Mode
+    function togglePresentationMode() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => alert("Fullscreen error: " + err.message));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // Initialize Chart.js Diagrams
+    window.addEventListener('DOMContentLoaded', () => {
+      
+      // 1. Win/Loss Chart (Sales Head)
+      const ctxWL = document.getElementById('winLossChart');
+      if (ctxWL) {
+        new Chart(ctxWL, {
+          type: 'doughnut',
+          data: {
+            labels: ['Price Premium (Imports)', 'Slow Response / Lead Time', 'Spec Not Locked', 'Won by Siamraj', 'Project Postponed'],
+            datasets: [{
+              data: [42, 28, 14, 23, 11],
+              backgroundColor: ['#EF4444', '#F59E0B', '#64748B', '#10B981', '#CBD5E1'],
+              borderWidth: 2,
+              borderColor: '#FFFFFF'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } }
+            }
+          }
+        });
+      }
+
+      // 2. Brand PO Volume Chart (Product Manager)
+      const ctxBM = document.getElementById('brandMarginChart');
+      if (ctxBM) {
+        new Chart(ctxBM, {
+          type: 'bar',
+          data: {
+            labels: ['Viking Pump', 'Warren Rupp', 'Goulds Pumps', 'Howden Comp.', 'Corken (CK)', 'Others'],
+            datasets: [{
+              label: 'Purchase Order Volume to Factory (M THB)',
+              data: [34.2, 15.8, 18.4, 7.1, 6.9, 8.1],
+              backgroundColor: ['#1E3A8A', '#2563EB', '#3B82F6', '#60A5FA', '#F59E0B', '#CBD5E1'],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: { beginAtZero: true, max: 45, ticks: { callback: v => v + 'M' } }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: ctx => ctx.parsed.y + 'M THB issued to factory' } }
+            }
+          }
+        });
+      }
+
+      // 3. BU Revenue Trend Chart (BU Manager)
+      const ctxBU = document.getElementById('buRevenueChart');
+      if (ctxBU) {
+        new Chart(ctxBU, {
+          type: 'line',
+          data: {
+            labels: ['2016', '2018', '2020', '2022', '2024', '2025', '2026 YTD', '2026 Proj'],
+            datasets: [
+              {
+                label: 'Historical Revenue (M THB)',
+                data: [360, 259, 244, 265, 204, 166, 137, 210],
+                borderColor: '#1E3A8A',
+                backgroundColor: 'rgba(30, 58, 138, 0.08)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 4
+              },
+              {
+                label: '300M Goal Trajectory',
+                data: [null, null, null, null, null, 180, 137, 300],
+                borderColor: '#10B981',
+                borderDash: [6, 6],
+                pointRadius: 5,
+                pointBackgroundColor: '#10B981'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: { beginAtZero: false, ticks: { callback: v => v + 'M' } }
+            },
+            plugins: {
+              legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+            }
+          }
+        });
+      }
+
+      // 4. CEO Trajectory Chart (CEO)
+      const ctxCEO = document.getElementById('ceoTrajectoryChart');
+      if (ctxCEO) {
+        new Chart(ctxCEO, {
+          type: 'bar',
+          data: {
+            labels: ['2025 Base', 'S1 Win-Back (+40M)', 'S2 Active Upsell (+30M)', 'S3 AMC (+25M)', 'S4 Win-Rate (+15M)', 'S5 EEC/DC (+15M)', 'Full Plan (305M)'],
+            datasets: [{
+              label: 'Revenue Building Blocks (M THB)',
+              data: [180, 40, 30, 25, 15, 15, 305],
+              backgroundColor: ['#64748B', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#0F172A'],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: { beginAtZero: true, max: 300, ticks: { callback: v => v + 'M' } }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+      }
+
+    });
+  
+    // ==========================================
+    // MULTI-REP DATA STORE (DBD, BOT, BOI, CRM)
+    // ==========================================
+    const salesRepData = {
+      anan: {
+        name: "Anan Prasert (อนันต์ ประเสริฐ)",
+        shortName: "Anan",
+        initials: "AP",
+        avatarImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+        tier: "Senior Account Executive",
+        territory: "📍 Assigned Zone: <strong>EEC Rayong — Map Ta Phut Petrochemical & Heavy Processing</strong> | Phone: 081-823-6922",
+        target: "🎯 Target: 3.00M",
+        booking: "2.62M",
+        progress: "87.3%",
+        attainText: "87.3% Attained",
+        pipeline: "11.40M",
+        quotesCount: "15 Open Quotations",
+        winRate: "27.5%",
+        peerDiff: "&uarr; +5.3%",
+        stalledCount: "3",
+        stalledValue: "Total 1.95M THB",
+        recommendations: [
+          {
+            score: "96/100",
+            company: "Rayong Olefins Co., Ltd. (PTTGC Group)",
+            location: "📍 Map Ta Phut Industrial Estate, Rayong",
+            badges: [
+              { type: "pill-dbd", text: "DBD: 5,400 HP / 850M Capital" },
+              { type: "pill-boi", text: "BOI: EEC Green Energy Incentive" },
+              { type: "pill-bot", text: "BOT: 1.00% CapEx Borrowing Window" },
+              { type: "pill-crm", text: "CRM: Lapsed (Last buy 2024 - 19.6M)" }
+            ],
+            desc: "<strong>Strategic Visit Objective:</strong> Plant is expanding ethylene cracking capacity under BOI 3-year machinery tax exemption. Their 6x primary process pumps are reaching 12-year service life.",
+            opportunity: "Goulds 3196 Super Duplex Process Pumps (Est. 3.8M THB)",
+            actionText: "📅 Schedule Plant Audit"
+          },
+          {
+            score: "92/100",
+            company: "Dow Chemical Thailand Limited",
+            location: "📍 Hemraj Eastern Industrial Estate, Rayong",
+            badges: [
+              { type: "pill-crm", text: "CRM: Active (57.6M THB Lifetime)" },
+              { type: "pill-boi", text: "BOI: Smart Manufacturing Upgrade" },
+              { type: "pill-bot", text: "BOT: Private Investment +6.0% Surge" }
+            ],
+            desc: "<strong>Service Gap Opportunity:</strong> Closed 3 HelpDesk service tickets in Q2 for mechanical seal failures without AMC. Opportunity to convert reactive repairs into comprehensive preventive contract.",
+            opportunity: "Annual Maintenance Contract (AMC) + IDEX Viking Seal Kits (Est. 1.6M THB/yr)",
+            actionText: "📄 Deploy AMC Proposal"
+          },
+          {
+            score: "88/100",
+            company: "Thai Polyethylene (SCG Chemicals)",
+            location: "📍 RIL Industrial Estate, Rayong",
+            badges: [
+              { type: "pill-dbd", text: "DBD: 7,800 HP Steam System" },
+              { type: "pill-bot", text: "BOT: Low Interest Financing Benefit" }
+            ],
+            desc: "<strong>Energy Retrofit Cue:</strong> Plant engineering team is auditing boiler feed pumps to cut electricity tariffs before 2027 LNG price fluctuations.",
+            opportunity: "KSB / Goulds High-Pressure Multi-Stage Pumps (Est. 2.9M THB)",
+            actionText: "📞 Contact Lead Engineer"
+          }
+        ],
+        deals: [
+          { ref: "QT-260841", client: "Rayong Olefins (PTTGC)", eq: "Goulds 3196 Process Pump Skid", val: "1,240,000", stage: "Final Negotiation (85%)", stageClass: "badge-success", age: "12 Days" },
+          { ref: "QT-260892", client: "Dow Chemical Thailand", eq: "Viking Gear Pump (VK) Repair & Spares", val: "485,000", stage: "PO Pending (90%)", stageClass: "badge-success", age: "7 Days" },
+          { ref: "QT-260715", client: "SCG Chemicals (Rayong)", eq: "Warren Rupp AODD Diaphragm Kits", val: "320,000", stage: "Price Clarification (70%)", stageClass: "badge-warning", age: "31 Days" },
+          { ref: "QT-260904", client: "IRPC Public Co., Ltd.", eq: "Howden Compressor Valve Assembly", val: "1,850,000", stage: "Proposal Review (60%)", stageClass: "badge-info", age: "18 Days" }
+        ],
+        todos: [
+          { dayKey: "d1", dayLabel: "Day 1 (Mon, Sep 07 - Today)", typeBadge: "badge-crm-quote", typeText: "CRM Quote Expiry", crmRef: "CRM: QT-260841", title: "Closing Call: Thai Oil PCL (1.24M THB)", meta: "Quote validity (30 days) expires in 3 days. Confirm PO issuance with procurement manager • 11:30 AM" },
+          { dayKey: "d1", dayLabel: "Day 1 (Mon, Sep 07 - Today)", typeBadge: "badge-crm-lead", typeText: "Inbound SLA", crmRef: "CRM: LE-1249", title: "Contact New Lead: Rayong Tank Terminal", meta: "Inquiry on stainless chemical AODD pumps. Target 2-hour response SLA • 2:30 PM" },
+          
+          { dayKey: "d2", dayLabel: "Day 2 (Tue, Sep 08)", typeBadge: "badge-crm-visit", typeText: "Plant Audit", crmRef: "CRM Event #EV-4091", title: "On-site Visit: Rayong Olefins (PTTGC)", meta: "Inspect Plant 2 process pump foundations for Goulds 3196 retrofit (3.8M THB opportunity) • 10:00 AM" },
+          { dayKey: "d2", dayLabel: "Day 2 (Tue, Sep 08)", typeBadge: "badge-crm-amc", typeText: "Service Ticket Follow-up", crmRef: "CRM: HD-5120", title: "Dow Chemical: Post-Service Follow-up", meta: "HelpDesk ticket closed for mechanical seal repair. Follow up with maintenance head on seal durability" },
+          
+          { dayKey: "d3", dayLabel: "Day 3 (Wed, Sep 09 - PM Sync)", typeBadge: "badge-crm-sync", typeText: "PM Alignment", crmRef: "EPS Sync Node", title: "Joint Alignment with PM Jom (Wednesday Session)", meta: "Request 5% volume discount buffer for SCG Chemicals tender QT-260715 (320K THB) • 10:00 AM" },
+          { dayKey: "d3", dayLabel: "Day 3 (Wed, Sep 09 - PM Sync)", typeBadge: "badge-crm-winback", typeText: "Win-Back Outreach", crmRef: "CRM Churn #11x2203", title: "Win-back Call: SAS Tech Solutions (37.9M Historical)", meta: "Dormant client since 2024. Re-introduce Siamraj fast-track Viking spare parts inventory • 2:00 PM" },
+          
+          { dayKey: "d4", dayLabel: "Day 4 (Thu, Sep 10)", typeBadge: "badge-crm-amc", typeText: "AMC Contract Pitch", crmRef: "CRM: QT-260950", title: "Submit Comprehensive AMC to Dow Chemical", meta: "Formalize 1.6M THB/year preventive maintenance contract covering 14 IDEX gear pumps • 11:00 AM" },
+          { dayKey: "d4", dayLabel: "Day 4 (Thu, Sep 10)", typeBadge: "badge-crm-quote", typeText: "Stalled Follow-up", crmRef: "CRM: QT-260904", title: "IRPC Follow-up: Compressor Valve Assembly", meta: "Quote open 18 days (1.85M THB). Check if technical clarification met maintenance standards" },
+          
+          { dayKey: "d5", dayLabel: "Day 5 (Fri, Sep 11 - Weekly Close)", typeBadge: "badge-crm-quote", typeText: "PO Collection", crmRef: "CRM: QT-260892", title: "Collect Confirmed PO: Dow Chemical (485K THB)", meta: "Procurement approved Viking gear pump repair kit. Secure signed PO document by 4:00 PM" },
+          { dayKey: "d5", dayLabel: "Day 5 (Fri, Sep 11 - Weekly Close)", typeBadge: "badge-crm-sync", typeText: "CRM Sanitization", crmRef: "CRM Weekly SLA", title: "Log Win/Loss Debriefs & Sanitize Pipeline", meta: "Mandatory Friday CRM update: record lost reasons and refresh expected close dates for Group Head" }
+        ]
+      },
+
+      somchai: {
+        name: "Somchai Kiatwong (สมชาย เกียรติวงศ์)",
+        shortName: "Somchai",
+        initials: "SK",
+        avatarImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+        tier: "Key Account Specialist (Power & Heavy)",
+        territory: "📍 Assigned Zone: <strong>EEC Chonburi — Power Generation, Utilities & Automotive</strong> | Phone: 089-445-1200",
+        target: "🎯 Target: 3.00M",
+        booking: "2.85M",
+        progress: "95.0%",
+        attainText: "95.0% Attained",
+        pipeline: "9.80M",
+        quotesCount: "11 Open Quotations",
+        winRate: "31.2%",
+        peerDiff: "&uarr; +9.0%",
+        stalledCount: "1",
+        stalledValue: "Total 420K THB",
+        recommendations: [
+          {
+            score: "98/100",
+            company: "SAS Tech Solution Co., Ltd.",
+            location: "📍 Amata City Chonburi Industrial Estate",
+            badges: [
+              { type: "pill-crm", text: "CRM: Top Lapsed (#1 Dormant: 94.0M THB)" },
+              { type: "pill-dbd", text: "DBD: Registered 6,200 HP Machinery" },
+              { type: "pill-boi", text: "BOI: Production Line Revamp" }
+            ],
+            desc: "<strong>Major Win-Back Account:</strong> Historically Siamraj's largest buyer (94M THB) dormant since 2016 management transition. DBD registers new factory expansion underway.",
+            opportunity: "Complete Slurry & Water Pumping Overhaul Package (Est. 5.5M THB)",
+            actionText: "🤝 Executive Win-Back Visit"
+          },
+          {
+            score: "94/100",
+            company: "Gulf Energy Development (Chonburi IPP)",
+            location: "📍 Laem Chabang Industrial Estate, Chonburi",
+            badges: [
+              { type: "pill-bot", text: "BOT: Energy Sector CapEx Expansion" },
+              { type: "pill-dbd", text: "DBD: 18,000 HP Heavy Utility" },
+              { type: "pill-boi", text: "BOI: High-Efficiency Power Project" }
+            ],
+            desc: "<strong>Power Expansion Tailwinds:</strong> Feeding surge in EEC Data Center power demand. High continuous runtime requires redundant boiler feed and condensate pumps.",
+            opportunity: "Goulds Vertical Turbine & Boiler Feed Pumps (Est. 7.2M THB)",
+            actionText: "📅 Schedule Plant Engineering Meeting"
+          }
+        ],
+        deals: [
+          { ref: "QT-260810", client: "Gulf Chonburi Power", eq: "Goulds VIT Seawater Intake Pump", val: "2,150,000", stage: "PO Processing (95%)", stageClass: "badge-success", age: "9 Days" },
+          { ref: "QT-260867", client: "TPI Polene Power", eq: "Xylem Flygt Submersible Pumps", val: "700,000", stage: "Final Review (80%)", stageClass: "badge-success", age: "14 Days" }
+        ],
+        todos: [
+          { dayKey: "d1", dayLabel: "Day 1 (Mon, Sep 07 - Today)", typeBadge: "badge-crm-quote", typeText: "PO Finalization", crmRef: "CRM: QT-260810", title: "Finalize Contract: Gulf Chonburi Power (2.15M THB)", meta: "Boiler feed seawater intake pump skid. Confirm delivery penalty terms with legal • 2:00 PM" },
+          { dayKey: "d1", dayLabel: "Day 1 (Mon, Sep 07 - Today)", typeBadge: "badge-crm-sync", typeText: "Site Pass Logistics", crmRef: "CRM Event #EV-4095", title: "Submit Gate Passes for Laem Chabang Plant Audit", meta: "Ensure service technician safety passes are verified for Tuesday walkthrough" },
+          
+          { dayKey: "d2", dayLabel: "Day 2 (Tue, Sep 08)", typeBadge: "badge-crm-visit", typeText: "Plant Inspection", crmRef: "CRM Event #EV-4100", title: "On-site Walkthrough: Gulf Chonburi IPP", meta: "18,000 HP facility inspection with Chief Plant Engineer. Verify cooling loop flow rate • 10:30 AM" },
+          { dayKey: "d2", dayLabel: "Day 2 (Tue, Sep 08)", typeBadge: "badge-crm-winback", typeText: "Top Win-Back Call", crmRef: "CRM Churn #11x2203", title: "Executive Win-back: SAS Tech Solution (38M Lapsed)", meta: "SAS Tech last purchased Dec 2024 — engineering contact on file • 3:00 PM" },
+          
+          { dayKey: "d3", dayLabel: "Day 3 (Wed, Sep 09 - PM Sync)", typeBadge: "badge-crm-sync", typeText: "PM Alignment", crmRef: "EPS Sync Node", title: "Compressor Quota Sync with PM Jom", meta: "Review Howden & Corken factory lead times for ITC Group & Wall Technology compressor bids • 10:00 AM" },
+          { dayKey: "d3", dayLabel: "Day 3 (Wed, Sep 09 - PM Sync)", typeBadge: "badge-crm-quote", typeText: "Stalled Follow-up", crmRef: "CRM: QT-260867", title: "TPI Polene Power: Flygt Submersible Pumps", meta: "Quote open 14 days (700K THB). Clarify pump head and cable length with engineering" },
+          
+          { dayKey: "d4", dayLabel: "Day 4 (Thu, Sep 10)", typeBadge: "badge-crm-amc", typeText: "AMC Service Pitch", crmRef: "CRM: QT-260955", title: "Submit 2-Year AMC Contract to TPI Polene", meta: "Comprehensive maintenance for raw water intake pumps (1.2M THB/year) • 11:30 AM" },
+          { dayKey: "d4", dayLabel: "Day 4 (Thu, Sep 10)", typeBadge: "badge-crm-lead", typeText: "DBD Outbound", crmRef: "DBD: Chonburi Cogen", title: "Outbound Call: New Chonburi Cogeneration Plant", meta: "Tier-A prospect from DBD list (9,200 HP). Introduce Siamraj utility pump solutions" },
+          
+          { dayKey: "d5", dayLabel: "Day 5 (Fri, Sep 11 - Weekly Close)", typeBadge: "badge-crm-quote", typeText: "PO Booking", crmRef: "CRM: SO-20880", title: "Book Gulf Energy PO into CRM System", meta: "2.15M THB official order entry. Forward manufacturing specs to PM Jom & Factory team" }
+        ]
+      },
+
+      nattawut: {
+        name: "Nattawut Thongpan (ณัฐวุฒิ ทองปัน)",
+        shortName: "Nattawut",
+        initials: "NT",
+        avatarImg: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80",
+        tier: "Account Executive (General Industrial)",
+        territory: "📍 Assigned Zone: <strong>Bangkok & Samut Prakan — Chemical, Food & Manufacturing</strong> | Phone: 086-789-3321",
+        target: "🎯 Target: 3.00M",
+        booking: "1.84M",
+        progress: "61.3%",
+        attainText: "61.3% Attained",
+        pipeline: "14.20M",
+        quotesCount: "18 Open Quotations",
+        winRate: "26.4%",
+        peerDiff: "&uarr; +4.2%",
+        stalledCount: "4",
+        stalledValue: "Total 2.85M THB",
+        recommendations: [
+          {
+            score: "91/100",
+            company: "Thai Union Group PCL",
+            location: "📍 Samut Sakhon Industrial Zone",
+            badges: [
+              { type: "pill-dbd", text: "DBD: Food & Beverage TSIC 10201" },
+              { type: "pill-boi", text: "BOI: Automation & ESG Upgrade" },
+              { type: "pill-crm", text: "CRM: Active Buyer (Viking Pumps)" }
+            ],
+            desc: "<strong>Hygienic Upgrade:</strong> Shifting to automated CIP processing lines. Require stainless steel sanitary progressive cavity and positive displacement pumps.",
+            opportunity: "Seepex (SP) & Viking Hygienic Food-Grade Skids (Est. 2.4M THB)",
+            actionText: "📄 Send Sanitary Brochure"
+          },
+          {
+            score: "87/100",
+            company: "Panjapol Paper Industry Co., Ltd.",
+            location: "📍 Bang Bo, Samut Prakan",
+            badges: [
+              { type: "pill-crm", text: "CRM: Lapsed (17.5M THB Lifetime)" },
+              { type: "pill-dbd", text: "DBD: 4,100 HP Pulp Processing" }
+            ],
+            desc: "<strong>Paper Mill Win-back:</strong> Last purchased in 2024. Paper slurry handling pumps have severe abrasive wear requiring replacement impellers and heavy-duty casing.",
+            opportunity: "Goulds 3175 Paper Stock / Slurry Pumps (Est. 1.8M THB)",
+            actionText: "📞 Call Maintenance Manager"
+          }
+        ],
+        deals: [
+          { ref: "QT-260799", client: "Thai Union Group", eq: "Seepex Progressive Cavity Pump", val: "940,000", stage: "Commercial Review (75%)", stageClass: "badge-success", age: "22 Days" },
+          { ref: "QT-260650", client: "Ajinomoto (Thailand)", eq: "Viking Sanitary Internal Gear Pump", val: "520,000", stage: "Technical Evaluation (65%)", stageClass: "badge-info", age: "38 Days" }
+        ],
+        todos: [
+          { dayKey: "d1", dayLabel: "Day 1 (Mon, Sep 07 - Today)", typeBadge: "badge-crm-quote", typeText: "Commercial Review", crmRef: "CRM: QT-260799", title: "Thai Union Group: Follow-up on Seepex Skids (940K THB)", meta: "Hygienic processing line tender. Follow up on sanitary certificate submission • 10:00 AM" },
+          { dayKey: "d2", dayLabel: "Day 2 (Tue, Sep 08)", typeBadge: "badge-crm-winback", typeText: "Win-Back Visit", crmRef: "CRM Churn #11x1241", title: "Plant Walk: Panjapol Paper Industry (17.5M Lapsed)", meta: "Inspect abrasive pulp slurry pump wear at Samut Prakan mill. Present Goulds 3175 alternative • 11:00 AM" },
+          { dayKey: "d3", dayLabel: "Day 3 (Wed, Sep 09 - PM Sync)", typeBadge: "badge-crm-sync", typeText: "Factory Expedite", crmRef: "EPS Sync Node", title: "Meet PM Jom: Verify Seepex Germany Airfreight", meta: "Thai Union requires 6-week delivery. Confirm supplier expedite fee waiver • 10:00 AM" },
+          { dayKey: "d4", dayLabel: "Day 4 (Thu, Sep 10)", typeBadge: "badge-crm-quote", typeText: "Stalled Follow-up", crmRef: "CRM: QT-260650", title: "Ajinomoto Thailand: Viking Internal Gear Pump", meta: "Quote open 38 days (520K THB). Resolve seal flush plan question with factory engineer" },
+          { dayKey: "d5", dayLabel: "Day 5 (Fri, Sep 11 - Weekly Close)", typeBadge: "badge-crm-sync", typeText: "CRM Sanitization", crmRef: "CRM Weekly SLA", title: "Weekly Forecast Update for BKK & Samut Prakan", meta: "Submit revised Q3 forecast to Group Head; log Panjapol Paper site visit report" }
+        ]
+      },
+
+      wichai: {
+        name: "Wichai Raksakul (วิชัย รักสกุล)",
+        shortName: "Wichai",
+        initials: "WR",
+        avatarImg: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80",
+        tier: "Account Executive (Heavy Process & Mining)",
+        territory: "📍 Assigned Zone: <strong>Central & Saraburi — Cement, Mining & Industrial Water</strong> | Phone: 082-331-9988",
+        target: "🎯 Target: 3.00M",
+        booking: "2.10M",
+        progress: "70.0%",
+        attainText: "70.0% Attained",
+        pipeline: "8.50M",
+        quotesCount: "12 Open Quotations",
+        winRate: "21.8%",
+        peerDiff: "-0.4%",
+        stalledCount: "2",
+        stalledValue: "Total 1.10M THB",
+        recommendations: [
+          {
+            score: "93/100",
+            company: "Siam City Cement PCL (SCCC)",
+            location: "📍 Kaeng Khoi, Saraburi",
+            badges: [
+              { type: "pill-dbd", text: "DBD: Heavy Cement TSIC 23941" },
+              { type: "pill-bot", text: "BOT: Energy Saving Incentive" },
+              { type: "pill-crm", text: "CRM: Core Client (28M THB)" }
+            ],
+            desc: "<strong>Cooling Water & Dust Suppression:</strong> Upgrading wet scrubber pump stations to comply with stringent PM2.5 emissions guidelines.",
+            opportunity: "Xylem Lowara End-Suction & Goulds Slurry Pumps (Est. 3.2M THB)",
+            actionText: "📅 Book Site Walkthrough"
+          }
+        ],
+        deals: [
+          { ref: "QT-260780", client: "Siam City Cement", eq: "Goulds Slurry Pumps (Hard Metal)", val: "1,650,000", stage: "Tender Bid (70%)", stageClass: "badge-warning", age: "26 Days" }
+        ],
+        todos: [
+          { dayKey: "d1", dayLabel: "Day 1 (Mon, Sep 07 - Today)", typeBadge: "badge-crm-quote", typeText: "Tender Bid", crmRef: "CRM: QT-260780", title: "Siam City Cement (SCCC): Tender Submission (1.65M THB)", meta: "Goulds hard metal slurry pumps for wet scrubber system. Deliver sealed tender document • 1:30 PM" },
+          { dayKey: "d2", dayLabel: "Day 2 (Tue, Sep 08)", typeBadge: "badge-crm-visit", typeText: "Site Inspection", crmRef: "CRM Event #EV-4112", title: "Kaeng Khoi Kiln 4 Site Walkthrough", meta: "Inspect slurry piping layout and available NPSH with SCCC plant engineer • 10:00 AM" },
+          { dayKey: "d3", dayLabel: "Day 3 (Wed, Sep 09 - PM Sync)", typeBadge: "badge-crm-sync", typeText: "Technical Spec Sync", crmRef: "EPS Sync Node", title: "Align with PM Jom on Goulds Severe-Duty Impeller Specs", meta: "Ensure high-chrome metallurgy meets abrasive limestone slurry requirements • 10:00 AM" },
+          { dayKey: "d4", dayLabel: "Day 4 (Thu, Sep 10)", typeBadge: "badge-crm-lead", typeText: "Municipal Lead", crmRef: "CRM: LE-1280", title: "Saraburi Industrial Water Utility Inbound Lead", meta: "Inquiry on high-flow Lowara end-suction pumps for effluent treatment expansion" },
+          { dayKey: "d5", dayLabel: "Day 5 (Fri, Sep 11 - Weekly Close)", typeBadge: "badge-crm-sync", typeText: "Weekly Pipeline Close", crmRef: "CRM Weekly SLA", title: "Compile Central Region Sales Report", meta: "Review SCCC bid opening schedule and update expected booking date" }
+        ]
+      },
+
+      kittisak: {
+        name: "Kittisak Manop (กิตติศักดิ์ มานพ)",
+        shortName: "Kittisak",
+        initials: "KM",
+        avatarImg: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&auto=format&fit=crop&q=80",
+        tier: "Sales Engineer (Emerging Sectors & Data Center)",
+        territory: "📍 Assigned Zone: <strong>EEC Eastern Corridor — Data Center, Electronics & Greenfields</strong> | Phone: 085-112-4455",
+        target: "🎯 Target: 3.00M",
+        booking: "1.35M",
+        progress: "45.0%",
+        attainText: "45.0% Attained",
+        pipeline: "5.20M",
+        quotesCount: "8 Open Quotations",
+        winRate: "14.1%",
+        peerDiff: "-8.1%",
+        stalledCount: "2",
+        stalledValue: "Total 890K THB",
+        recommendations: [
+          {
+            score: "99/100",
+            company: "Hyperscale Data Center Campus (Zenith / STT)",
+            location: "📍 Amata City Chonburi EEC Data Hub",
+            badges: [
+              { type: "pill-boi", text: "BOI: Category 8 Digital Fast-Track ($1.7B)" },
+              { type: "pill-bot", text: "BOT: Key Driver of 2026 Private CapEx" },
+              { type: "pill-dbd", text: "DBD: Chilled Water Closed-Loop Mandate" }
+            ],
+            desc: "<strong>High-Growth Market Opportunity:</strong> BOI mandates strict closed-loop water cooling for high-density AI server racks (50-100 kW/rack). 24/7 critical uptime requirement.",
+            opportunity: "Xylem & Goulds Chilled Water Circulation Skids (Est. 8.8M THB)",
+            actionText: "🏢 Pitch to EPC Contractor"
+          },
+          {
+            score: "90/100",
+            company: "Western Digital (Thailand) Co., Ltd.",
+            location: "📍 Bang Pa-in Industrial Estate, Ayutthaya",
+            badges: [
+              { type: "pill-boi", text: "BOI: Smart Electronics Expansion" },
+              { type: "pill-dbd", text: "DBD: Ultra-Pure Water System" }
+            ],
+            desc: "<strong>Electronics Pure Water Requirement:</strong> Expanding semiconductor storage clean rooms. High demand for zero-contamination stainless diaphragm pumps.",
+            opportunity: "Wilden PTFE Diaphragm & Chemical Dosing Units (Est. 2.5M THB)",
+            actionText: "📞 Connect with Facilities Lead"
+          }
+        ],
+        deals: [
+          { ref: "QT-260912", client: "Zenith Data Center EPC", eq: "Primary Chilled Water Pump Skids", val: "4,200,000", stage: "Engineering Clarification (50%)", stageClass: "badge-info", age: "15 Days" }
+        ],
+        todos: [
+          { dayKey: "d1", dayLabel: "Day 1 (Mon, Sep 07 - Today)", typeBadge: "badge-crm-quote", typeText: "EPC Tender Clarification", crmRef: "CRM: QT-260912", title: "Zenith Hyperscale Data Center EPC (4.2M THB)", meta: "Clarify primary chilled water pump head & N+1 redundancy specs with engineering consultant • 2:00 PM" },
+          { dayKey: "d2", dayLabel: "Day 2 (Tue, Sep 08)", typeBadge: "badge-crm-visit", typeText: "Contractor Presentation", crmRef: "CRM Event #EV-4125", title: "Present to TTCL Engineering (Data Center EPC Lead)", meta: "Deliver technical seminar on Xylem & Goulds energy-efficient cooling skid solutions • 10:30 AM" },
+          { dayKey: "d3", dayLabel: "Day 3 (Wed, Sep 09 - PM Sync)", typeBadge: "badge-crm-sync", typeText: "PM Jom Alignment", crmRef: "EPS Sync Node", title: "Detailed Data Center Sizing Session with PM Jom", meta: "Review closed-loop temperature differential & variable frequency drive (VFD) compatibility • 10:00 AM" },
+          { dayKey: "d4", dayLabel: "Day 4 (Thu, Sep 10)", typeBadge: "badge-crm-lead", typeText: "Cleanroom Outbound", crmRef: "DBD: Electronics Hub", title: "Outbound Call: Western Digital Ayutthaya Facilities", meta: "Cleanroom expansion inquiry. Introduce zero-contamination Wilden PTFE diaphragm pumps • 1:30 PM" },
+          { dayKey: "d5", dayLabel: "Day 5 (Fri, Sep 11 - Weekly Close)", typeBadge: "badge-crm-sync", typeText: "Weekly Pipeline Review", crmRef: "CRM Weekly SLA", title: "Submit Emerging Sector Strategic Briefing to Group Head", meta: "Summarize Q4 Data Center cooling opportunities pipeline (Target: 28M THB)" }
+        ]
+      }
+    };
+
+    
+    // NEXT 5 DAYS ACTION QUEUE LOGIC
+    let currentRepTodos = [];
+    let activeDayFilter = 'all';
+
+    function filterActionDays(dayKey, btnElement) {
+      activeDayFilter = dayKey;
+      document.querySelectorAll('.day-filter-btn').forEach(b => b.classList.remove('active'));
+      if (btnElement) btnElement.classList.add('active');
+      render5DayTodoList(dayKey);
+    }
+
+    function render5DayTodoList(filterDay) {
+      const container = document.getElementById("todoListContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      const filtered = (filterDay === 'all') 
+        ? currentRepTodos 
+        : currentRepTodos.filter(t => t.dayKey === filterDay);
+
+      document.getElementById("taskBadgeCount").innerText = `${filtered.length} Actions (${filterDay === 'all' ? 'Next 5 Days' : filterDay.toUpperCase()})`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:30px; color:#94A3B8; font-size:13px;">No scheduled actions for this day filter.</div>`;
+        return;
+      }
+
+      // Group by dayLabel
+      let currentDayGroup = "";
+      filtered.forEach(t => {
+        if (filterDay === 'all' && t.dayLabel !== currentDayGroup) {
+          currentDayGroup = t.dayLabel;
+          const dayHeader = document.createElement("div");
+          dayHeader.className = "action-day-header";
+          dayHeader.innerHTML = `📅 ${currentDayGroup}`;
+          container.appendChild(dayHeader);
+        }
+
+        const item = document.createElement("div");
+        item.className = "action-item";
+        item.innerHTML = `
+          <input type="checkbox" onchange="this.parentElement.style.opacity = this.checked ? '0.5' : '1';">
+          <div class="action-item-body">
+            <div class="action-item-header">
+              <span class="action-badge ${t.typeBadge}">${t.typeText}</span>
+              <span class="action-crm-ref">${t.crmRef}</span>
+            </div>
+            <div class="title" style="margin-top:2px;">${t.title}</div>
+            <div class="meta">${t.meta}</div>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function changeSalesRep(repKey) {
+      const data = salesRepData[repKey];
+      if (!data) return;
+
+      // Update Profile
+      document.getElementById("repName").innerHTML = data.name + ' <span class="role-tag tag-blue" id="repTier">' + data.tier + '</span>';
+      document.getElementById("repTerritory").innerHTML = data.territory;
+      const avatarImg = document.getElementById("repAvatarImg");
+      if (avatarImg) {
+        avatarImg.src = data.avatarImg;
+        avatarImg.alt = data.name;
+      }
+      document.getElementById("recRepName").innerText = data.shortName;
+
+      // Update KPIs
+      document.getElementById("kpiTarget").innerText = data.target;
+      document.getElementById("kpiBooking").innerText = data.booking;
+      document.getElementById("kpiProgressBar").style.width = data.progress;
+      document.getElementById("kpiAttain").innerText = data.attainText;
+      document.getElementById("kpiPipeline").innerText = data.pipeline;
+      document.getElementById("kpiQuotesCount").innerText = data.quotesCount;
+      document.getElementById("kpiWinRate").innerText = data.winRate;
+      document.getElementById("kpiPeerDiff").innerHTML = data.peerDiff + " vs peer avg";
+      document.getElementById("kpiStalledCount").innerHTML = data.stalledCount + ' <span style="font-size:16px;font-weight:600;color:var(--danger);">Quotes</span>';
+      document.getElementById("kpiStalledValue").innerText = data.stalledValue + " awaiting follow-up";
+
+      // Update Recommendations
+      const recContainer = document.getElementById("recommendationsContainer");
+      recContainer.innerHTML = "";
+      data.recommendations.forEach(rec => {
+        let badgeHtml = "";
+        rec.badges.forEach(b => {
+          badgeHtml += `<span class="rec-pill ${b.type}">${b.text}</span>`;
+        });
+
+        const card = document.createElement("div");
+        card.className = "rec-card";
+        card.innerHTML = `
+          <div>
+            <div class="rec-top">
+              <div>
+                <div class="rec-company">${rec.company}</div>
+                <div class="rec-location">${rec.location}</div>
+              </div>
+              <div class="rec-priority-score">★ Score: ${rec.score}</div>
+            </div>
+            <div class="rec-badges">${badgeHtml}</div>
+            <div class="rec-body">${rec.desc}</div>
+          </div>
+          <div class="rec-footer">
+            <div class="rec-value"><strong>Est. Opportunity:</strong> ${rec.opportunity}</div>
+            <button class="rec-action-btn" onclick="alert('Action dispatched for ${rec.company}')">${rec.actionText}</button>
+          </div>
+        `;
+        recContainer.appendChild(card);
+      });
+
+      // Update Deals Table
+      const dealsTbody = document.getElementById("dealsTableBody");
+      dealsTbody.innerHTML = "";
+      data.deals.forEach(d => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${d.ref}</strong></td>
+          <td>${d.client}</td>
+          <td>${d.eq}</td>
+          <td>${d.val}</td>
+          <td><span class="badge-status ${d.stageClass}">${d.stage}</span></td>
+          <td>${d.age}</td>
+          <td><button class="switch-btn" onclick="alert('Viewing Deal ${d.ref}')">View Deal</button></td>
+        `;
+        dealsTbody.appendChild(tr);
+      });
+
+      // Update 5-Day Action Queue
+      currentRepTodos = data.todos;
+      activeDayFilter = 'all';
+      render5DayTodoList('all');
+    }
+
+    // Call once on page load to initialize Anan
+    window.addEventListener("DOMContentLoaded", () => {
+      changeSalesRep("anan");
+    });
+
+  
+
+
+  
+    // ============================================================
+    // GROUP HEAD — TEAM 5-DAY BOARD & COVERAGE (added features)
+    // ============================================================
+    const repOrder = ['anan', 'somchai', 'nattawut', 'wichai', 'kittisak'];
+    const dayOrder = ['d1', 'd2', 'd3', 'd4', 'd5'];
+    const repPhotoMap = {
+      anan: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80',
+      somchai: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80',
+      nattawut: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&auto=format&fit=crop&q=80',
+      wichai: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80',
+      kittisak: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80'
+    };
+
+    // 12-month visit coverage per rep (portfolio census)
+    const coverageData = {
+      anan:     { owned: 42, v3: 12, v36: 10, v612: 9,  v12: 11 },
+      somchai:  { owned: 28, v3: 15, v36: 7,  v612: 4,  v12: 2  },
+      nattawut: { owned: 55, v3: 10, v36: 11, v612: 13, v12: 21 },
+      wichai:   { owned: 31, v3: 9,  v36: 8,  v612: 7,  v12: 7  },
+      kittisak: { owned: 18, v3: 10, v36: 4,  v612: 2,  v12: 2  }
+    };
+
+    let expandedRepKey = 'anan';
+
+    function countPlannedVisits(todos) {
+      return todos.filter(t => /visit|walkthrough|site|audit|plant|present|outbound|tender|closing|pitch/i.test(t.title)).length;
+    }
+
+    function renderTeamBoard() {
+      const body = document.getElementById('teamBoardBody');
+      const summary = document.getElementById('teamDaySummary');
+      if (!body || !summary) return;
+
+      // Day totals across team
+      const dayTotals = { d1: 0, d2: 0, d3: 0, d4: 0, d5: 0 };
+      let teamTotal = 0;
+      repOrder.forEach(k => {
+        const rep = salesRepData[k];
+        if (!rep) return;
+        rep.todos.forEach(t => { if (dayTotals[t.dayKey] !== undefined) { dayTotals[t.dayKey]++; teamTotal++; } });
+      });
+
+      // Summary chips
+      const chipNames = { d1: 'Day 1 · Mon', d2: 'Day 2 · Tue', d3: 'Day 3 · Wed (PM Sync)', d4: 'Day 4 · Thu', d5: 'Day 5 · Fri' };
+      summary.innerHTML = repOrder.length ? '' : '';
+      summary.innerHTML = `<div class="day-chip" style="background:#1E3A8A;color:#fff;border-color:#1E3A8A;"><b style="color:#fff;">${teamTotal}</b><span style="color:#BFDBFE;">Team Actions · 5 Days</span></div>`;
+      dayOrder.forEach(d => {
+        summary.innerHTML += `<div class="day-chip"><b>${dayTotals[d]}</b><span>${chipNames[d]}</span></div>`;
+      });
+
+      // Table rows
+      body.innerHTML = '';
+      repOrder.forEach(k => {
+        const rep = salesRepData[k];
+        if (!rep) return;
+        const photo = repPhotoMap[k];
+        const byDay = { d1: [], d2: [], d3: [], d4: [], d5: [] };
+        rep.todos.forEach(t => { if (byDay[t.dayKey]) byDay[t.dayKey].push(t); });
+        let total = rep.todos.length;
+
+        const tr = document.createElement('tr');
+        tr.className = 'rep-row' + (expandedRepKey === k ? ' selected' : '');
+        tr.setAttribute('onclick', `toggleRepPlan('${k}')`);
+
+        let cellsHtml = `<td><div class="rep-cell"><img class="mini-rep-thumb" src="${photo}"><strong>${rep.shortName}</strong></div></td>`;
+        dayOrder.forEach(d => {
+          const items = byDay[d];
+          if (items && items.length > 0) {
+            cellsHtml += `<td><span class="day-count-cell"><b>${items.length}</b> actions</span><div class="day-top-1">${items[0].title}</div></td>`;
+          } else {
+            cellsHtml += `<td style="color:#CBD5E1;">—</td>`;
+          }
+        });
+        cellsHtml += `<td style="font-weight:800;color:#1E3A8A;">${total}</td>`;
+        tr.innerHTML = cellsHtml;
+        body.appendChild(tr);
+      });
+
+      renderPlanDetail(expandedRepKey);
+    }
+
+    function toggleRepPlan(key) {
+      expandedRepKey = (expandedRepKey === key) ? null : key;
+      renderTeamBoard();
+    }
+
+    function renderPlanDetail(key) {
+      const holder = document.getElementById('teamPlanDetail');
+      if (!holder) return;
+      if (!key) { holder.innerHTML = ''; return; }
+      const rep = salesRepData[key];
+      if (!rep) return;
+
+      const photo = repPhotoMap[key];
+      let html = `<div style="margin-bottom:6px;"><img class="mini-rep-thumb" src="${photo}" style="width:26px;height:26px;"><strong style="font-size:14px;">${rep.name}</strong> <span style="font-size:11.5px;color:#64748B;">— expanded 5-day plan (${rep.todos.length} CRM actions)</span></div>`;
+
+      let currentDay = '';
+      rep.todos.forEach(t => {
+        if (t.dayLabel !== currentDay) {
+          currentDay = t.dayLabel;
+          html += `<div class="plan-day-head">📅 ${t.dayLabel}</div>`;
+        }
+        html += `<div class="plan-item">
+                   <span class="action-badge ${t.typeBadge}">${t.typeText}</span><span class="plan-ref">${t.crmRef}</span>
+                   <div class="plan-title">${t.title}</div>
+                   <div class="plan-meta">${t.meta}</div>
+                 </div>`;
+      });
+      holder.innerHTML = html;
+    }
+
+    function renderCoverage() {
+      const body = document.getElementById('coverageBody');
+      const insight = document.getElementById('coverageInsight');
+      if (!body) return;
+
+      body.innerHTML = '';
+      const chartData = { labels: [], pct: [], colors: [] };
+      let teamOwned = 0, teamContacted6 = 0, teamAtRisk = 0, teamPlanned = 0;
+
+      repOrder.forEach(k => {
+        const c = coverageData[k];
+        const rep = salesRepData[k];
+        if (!c || !rep) return;
+        const contacted = c.v3 + c.v36;
+        const pct = Math.round((contacted / c.owned) * 100);
+        const atRisk = c.v12;
+        const planned = countPlannedVisits(rep.todos);
+
+        teamOwned += c.owned; teamContacted6 += contacted; teamAtRisk += atRisk; teamPlanned += planned;
+
+        const status = pct >= 70 ? ['cov-good', 'Healthy'] : (pct >= 50 ? ['cov-mid', 'Action Needed'] : ['cov-bad', 'High Risk']);
+        const barColor = pct >= 70 ? '#10B981' : (pct >= 50 ? '#F59E0B' : '#EF4444');
+        chartData.labels.push(rep.shortName);
+        chartData.pct.push(pct);
+        chartData.colors.push(barColor);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><div class="rep-cell"><img class="mini-rep-thumb" src="${repPhotoMap[k]}"><strong>${rep.shortName}</strong></div></td>
+          <td><b>${c.owned}</b></td><td>${c.v3}</td><td>${c.v36}</td><td>${c.v612}</td>
+          <td style="color:${atRisk > 5 ? '#B91C1C' : '#065F46'};font-weight:700;">${atRisk}</td>
+          <td style="font-weight:800;">${pct}%</td>
+          <td>${planned}</td>
+          <td><span class="cov-pill ${status[0]}">${status[1]}</span></td>`;
+        body.appendChild(tr);
+      });
+
+      // Team total row
+      const teamPct = Math.round((teamContacted6 / teamOwned) * 100);
+      const teamTr = document.createElement('tr');
+      teamTr.style.background = '#F8FAFC';
+      teamTr.style.fontWeight = '800';
+      teamTr.innerHTML = `<td><strong>Team Total</strong></td><td><strong>${teamOwned}</strong></td><td></td><td></td><td></td>
+        <td style="color:#B91C1C;font-weight:800;">${teamAtRisk}</td><td style="font-weight:800;">${teamPct}%</td><td><strong>${teamPlanned}</strong></td>
+        <td><span class="cov-pill ${teamPct >= 70 ? 'cov-good' : (teamPct >= 50 ? 'cov-mid' : 'cov-bad')}">${teamPct >= 70 ? 'Healthy' : (teamPct >= 50 ? 'Below Target' : 'High Risk')}</span></td>`;
+      body.appendChild(teamTr);
+
+      // Insight
+      const worst = repOrder.reduce((a, k) => {
+        const c = coverageData[k]; const pct = (c.v3 + c.v36) / c.owned;
+        return (!a || pct < a.pct) ? { key: k, pct, c } : a;
+      }, null);
+      const worstName = salesRepData[worst.key].shortName;
+      const coverage = (document.getElementById('coverageChart'));
+      if (coverage) {
+        new Chart(coverage, {
+          type: 'bar',
+          data: {
+            labels: chartData.labels,
+            datasets: [{
+              label: 'Portfolio Contacted ≤6m (%)',
+              data: chartData.pct,
+              backgroundColor: chartData.colors,
+              borderRadius: 6,
+              barPercentage: 0.55
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#F1F5F9' } },
+              y: { grid: { display: false } }
+            },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.x + '% of portfolio visited' } } }
+          }
+        });
+      }
+
+      insight.innerHTML = `<strong>Coverage diagnosis:</strong> Team coverage is <strong>${teamPct}%</strong> vs the 70% management target — <span class="insight-highlight">${teamAtRisk} accounts (${Math.round(teamAtRisk / teamOwned * 100)}% of the book) have not been visited in over 12 months</span> and are silent churn risks.<br><br>
+        <strong>Worst gap: ${worstName}</strong> — only ${Math.round(worst.pct * 100)}% coverage. Accounts untouched &gt;6 months should be routed into the <strong>Win-Back / AMC queues</strong>; the next 5 days only cover <strong>${teamPlanned} on-site visits</strong> vs ${teamAtRisk} at-risk accounts, so a targeted re-visit blitz for ${worstName}'s dormant list is the priority for the coming two weeks.`;
+    }
+
+    // Hook: render team board + coverage after DOM ready
+    window.addEventListener('DOMContentLoaded', () => {
+      try { 
+        renderTeamBoard(); 
+        renderCoverage(); 
+        
+        // Render OIE Sector-wise Macro Chart (20 Sectors from CSV)
+        const sectorCtx = document.getElementById('macroSectorChart');
+        if (sectorCtx) {
+          new Chart(sectorCtx, {
+            type: 'bar',
+            data: {
+              labels: [
+                'Pick-up Trucks', 'Passenger Cars', 'Storage Devices', 'Plastic Pallets/Resin', 
+                'Semiconductors & IC', 'Industrial Refrigeration', 'Plastic Packaging', 'Printed Circuit Boards',
+                'Rubber Plates/Sheets', 'Pet Foods', 'Concrete Articles', 'Palm Oil',
+                'Iron & Steel', 'Rubber Tyres', 'Medical Instruments', 'Poultry Slaughtering',
+                'Steel Sheets', 'Ready-mixed Concrete', 'Pharmaceuticals', 'Inorganic Chemicals'
+              ],
+              datasets: [
+                {
+                  label: 'Capacity Utilization (CapU % from CSV)',
+                  data: [51.7, 42.4, 49.3, 67.2, 98.1, 46.8, 47.8, 52.0, 51.5, 56.1, 52.9, 45.8, 53.5, 63.9, 51.5, 75.4, 36.4, 64.0, 45.7, 66.3],
+                  backgroundColor: '#F59E0B',
+                  borderRadius: 3
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 110,
+                  ticks: { callback: v => v + '%' },
+                  grid: { color: '#F1F5F9' }
+                },
+                x: {
+                  grid: { display: false },
+                  ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 45 }
+                }
+              },
+              plugins: {
+                legend: { position: 'top', labels: { boxWidth: 14, font: { size: 11 } } },
+                tooltip: {
+                  callbacks: {
+                    label: context => 'Capacity Utilization: ' + context.parsed.y + '%'
+                  }
+                }
+              }
+            }
+          });
+        }
+      } catch (e) { console.error('GroupHead render error:', e); }
+    });
+
+  </script>
+</body>
+</html>
